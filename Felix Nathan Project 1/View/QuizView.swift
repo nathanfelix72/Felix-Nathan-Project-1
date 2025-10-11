@@ -1,5 +1,5 @@
 //
-//  LessonView.swift
+//  QuizView.swift
 //  Felix Nathan Project 1
 //
 //  Created by IS 543 on 10/11/25.
@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct LessonView: View {
+struct QuizView: View {
     var body: some View {
-        Text("Lesson View")
+        Text("Quiz View")
     }
 }
 
 #Preview {
-    LessonView()
+    QuizView()
 }

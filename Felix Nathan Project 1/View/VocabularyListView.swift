@@ -6,3 +6,13 @@
 //
 
 import SwiftUI
+
+struct VocabularyListView: View {
+    var body: some View {
+        Text("VocabularyList View")
+    }
+}
+
+#Preview {
+    VocabularyListView()
+}

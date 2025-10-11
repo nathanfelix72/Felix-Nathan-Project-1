@@ -6,3 +6,13 @@
 //
 
 import SwiftUI
+
+struct FlashcardView: View {
+    var body: some View {
+        Text("Flashcard View")
+    }
+}
+
+#Preview {
+    FlashcardView()
+}

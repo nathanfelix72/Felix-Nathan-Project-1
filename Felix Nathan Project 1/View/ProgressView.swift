@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct IndividualTopicView: View {
+struct ProgressView: View {
     let topic: String
     
     var body: some View {
@@ -25,5 +25,5 @@ struct IndividualTopicView: View {
 }
 
 #Preview {
-    IndividualTopicView(topic: "Sample Topic")
+    ProgressView(topic: "Sample Topic")
 }

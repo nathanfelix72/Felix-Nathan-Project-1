@@ -6,3 +6,24 @@
 //
 
 import Foundation
+
+@Observable class OgniloudViewModel {
+    // MARK - Constants
+    
+    
+    // Mark - Properties
+    
+    
+    // Mark - Initialization
+    
+    
+    // Mark - Model Access
+    
+    
+    // Mark - User Intents
+    
+    
+    // Mark - Private Helpers
+    
+    
+}

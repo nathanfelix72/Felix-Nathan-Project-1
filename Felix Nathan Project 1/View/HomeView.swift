@@ -1,42 +1,23 @@
 //
 //  HomeView.swift
-//  Ogniloud
+//  Felix Nathan Project 1
 //
-//  Created by IS 543 on 10/9/25.
+//  Created by IS 543 on 10/11/25.
 //
 
 import SwiftUI
 
 struct HomeView: View {
-    let topics = ["Relatives", "Calendar", "Food"]
-    
     var body: some View {
         NavigationStack {
-            List(topics, id: \.self) { topic in
-                NavigationLink(destination: TopicView(topic: topic)) {
-                    Text(topic)
+            List() {
+                NavigationLink(destination: TopicsView()) {
+                    Text("View All Topics")
                 }
             }
-            .navigationTitle("Topics")
+            .navigationTitle("Activities")
             
         }
-    }
-}
-
-struct TopicView: View {
-    let topic: String
-    
-    var body: some View {
-        Form {
-            Section(header: Text("Lesson about \(topic)")) {
-                Button(action: {
-                    // NEEDSWORK
-                }, label: {
-                    Text("Mark Complete")
-                })
-            }
-        }
-        .navigationTitle(topic)
     }
 }
 

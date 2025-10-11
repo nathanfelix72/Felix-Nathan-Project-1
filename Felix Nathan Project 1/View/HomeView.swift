@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  HomeView.swift
 //  Ogniloud
 //
 //  Created by IS 543 on 10/9/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct HomeView: View {
     let topics = ["Relatives", "Calendar", "Food"]
     
     var body: some View {
@@ -41,5 +41,5 @@ struct TopicView: View {
 }
 
 #Preview {
-    ContentView()
+    HomeView()
 }

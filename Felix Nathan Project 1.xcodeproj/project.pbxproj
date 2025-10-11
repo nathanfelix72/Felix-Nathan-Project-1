@@ -35,16 +35,6 @@
 			path = "Felix Nathan Project 1";
 			sourceTree = "<group>";
 		};
-		FC95F5F92E980376009FB0BE /* OgniloudTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = OgniloudTests;
-			sourceTree = "<group>";
-		};
-		FC95F6032E980376009FB0BE /* OgniloudUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = OgniloudUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,8 +66,6 @@
 			isa = PBXGroup;
 			children = (
 				FC95F5EB2E980374009FB0BE /* Felix Nathan Project 1 */,
-				FC95F5F92E980376009FB0BE /* OgniloudTests */,
-				FC95F6032E980376009FB0BE /* OgniloudUITests */,
 				FC95F5EA2E980374009FB0BE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -130,9 +118,6 @@
 			dependencies = (
 				FC95F5F82E980376009FB0BE /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				FC95F5F92E980376009FB0BE /* OgniloudTests */,
-			);
 			name = "Felix Nathan Project 1Tests";
 			packageProductDependencies = (
 			);
@@ -152,9 +137,6 @@
 			);
 			dependencies = (
 				FC95F6022E980376009FB0BE /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				FC95F6032E980376009FB0BE /* OgniloudUITests */,
 			);
 			name = "Felix Nathan Project 1UITests";
 			packageProductDependencies = (

@@ -16,7 +16,8 @@ let spanishTopics = [
         ],
         lesson: """
             In Spanish, *mother* is _madre_ and *father* is _padre_.
-            """),
+            """,
+        subPages: ["View Vocabulary List", "Practice Flashcards", "Lesson", "Quiz", "View Progress"]),
     OgniloudModel.OgniloudTopic(
         title: "Calendar",
         terms: [
@@ -25,5 +26,6 @@ let spanishTopics = [
         ],
         lesson: """
             In Spanish, *mother* is _madre_ and *father* is _padre_.
-            """)
+            """,
+        subPages: ["View Vocabulary List", "Practice Flashcards", "Lesson", "Quiz", "View Progress"])
 ]

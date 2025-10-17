@@ -11,16 +11,24 @@ struct VocabularyListView: View {
     let topic: String
     
     var body: some View {
-        Form {
-            Section(header: Text("Vocabulary about \(topic)")) {
-                Button(action: {
-                    // NEEDSWORK
-                }, label: {
-                    Text("Mark Complete")
-                })
+        HStack {
+            Form {
+                Section(header: Text("\(topic)")) {
+                    List {
+                        
+                    }
+                }
             }
+            .navigationTitle(topic)
+            Form {
+                Section(header: Text("\(topic)")) {
+                    List {
+                        
+                    }
+                }
+            }
+            .navigationTitle(topic)
         }
-        .navigationTitle(topic)
     }
 }
 

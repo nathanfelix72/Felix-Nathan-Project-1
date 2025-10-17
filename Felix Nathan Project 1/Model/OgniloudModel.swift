@@ -10,10 +10,11 @@ import Foundation
 struct OgniloudModel {
     var topics: [OgniloudTopic]
     
-    struct OgniloudTopic {
-        var id = UUID()
+    struct OgniloudTopic: Identifiable {
+        var id: UUID = UUID()
         var title: String
-        var terms: [String : String]
+        var terms: [String: String]
         var lesson: String
+        var subPages: [String]
     }
 }

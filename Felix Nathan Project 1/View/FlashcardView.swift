@@ -8,11 +8,22 @@
 import SwiftUI
 
 struct FlashcardView: View {
+    let topic: String
+    
     var body: some View {
-        Text("Flashcard View")
+        Form {
+            Section(header: Text("Flashcards about \(topic)")) {
+                Button(action: {
+                    // NEEDSWORK
+                }, label: {
+                    Text("Mark Complete")
+                })
+            }
+        }
+        .navigationTitle(topic)
     }
 }
 
 #Preview {
-    FlashcardView()
+    FlashcardView(topic: "Sample Topic")
 }

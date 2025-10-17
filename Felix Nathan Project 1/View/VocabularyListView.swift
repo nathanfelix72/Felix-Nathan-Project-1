@@ -8,11 +8,22 @@
 import SwiftUI
 
 struct VocabularyListView: View {
+    let topic: String
+    
     var body: some View {
-        Text("VocabularyList View")
+        Form {
+            Section(header: Text("Vocabulary about \(topic)")) {
+                Button(action: {
+                    // NEEDSWORK
+                }, label: {
+                    Text("Mark Complete")
+                })
+            }
+        }
+        .navigationTitle(topic)
     }
 }
 
 #Preview {
-    VocabularyListView()
+    VocabularyListView(topic: "Sample Topic")
 }

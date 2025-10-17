@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct TopicsView: View {
+    
+    var ogniloudViewModel: OgniloudViewModel
+    
     struct TopicItem: Identifiable {
         let id = UUID()
         let title: String
@@ -26,14 +29,14 @@ struct TopicsView: View {
     var body: some View {
         NavigationStack {
             List {
-                ForEach(topicsData) { topic in
+                ForEach(ogniloudViewModel.topics) { topic in
                     DisclosureGroup(isExpanded: Binding(get: {
                         expandedTopics.contains(topic.id)
                     }, set: { newValue in
                         if newValue { expandedTopics.insert(topic.id) } else { expandedTopics.remove(topic.id) }
                     })) {
                         ForEach(topic.pages, id: \.self) { page in
-                            NavigationLink(destination: ProgressView(topic: page)) {
+                            NavigationLink(destination: TopicPageView(page: page, topic: topic.title)) {
                                 Text(page)
                             }
                         }
@@ -51,6 +54,36 @@ struct TopicsView: View {
     }
 }
 
+// I had chatGPT generate this for me
+struct TopicPageView: View {
+    let page: String
+    let topic: String
+
+    var body: some View {
+        switch page {
+        case "View Vocabulary List":
+            VocabularyListView(topic: topic)
+                .navigationTitle("\(topic) Vocabulary")
+        case "Practice Flashcards":
+            FlashcardView(topic: topic)
+                .navigationTitle("\(topic) Flashcards")
+        case "Lesson":
+            LessonView(topic: topic)
+                .navigationTitle("\(topic) Lesson")
+        case "Quiz":
+            QuizView(topic: topic)
+                .navigationTitle("\(topic) Quiz")
+        case "View Progress":
+            ProgressView(topic: topic)
+                .navigationTitle("\(topic) Progress")
+        default:
+            Text("Coming Soon")
+                .navigationTitle(topic)
+        }
+    }
+}
+
+
 #Preview {
-    TopicsView()
+    TopicsView(ogniloudViewModel: OgniloudViewModel())
 }

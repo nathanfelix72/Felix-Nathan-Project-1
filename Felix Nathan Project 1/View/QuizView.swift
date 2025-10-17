@@ -8,11 +8,22 @@
 import SwiftUI
 
 struct QuizView: View {
+    let topic: String
+    
     var body: some View {
-        Text("Quiz View")
+        Form {
+            Section(header: Text("Quiz about \(topic)")) {
+                Button(action: {
+                    // NEEDSWORK
+                }, label: {
+                    Text("Mark Complete")
+                })
+            }
+        }
+        .navigationTitle(topic)
     }
 }
 
 #Preview {
-    QuizView()
+    QuizView(topic: "Sample Topic")
 }

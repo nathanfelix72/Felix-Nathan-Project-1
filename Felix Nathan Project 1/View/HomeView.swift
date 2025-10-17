@@ -11,7 +11,7 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             List() {
-                NavigationLink(destination: TopicsView()) {
+                NavigationLink(destination: TopicsView(ogniloudViewModel: OgniloudViewModel())) {
                     Text("View All Topics")
                 }
             }

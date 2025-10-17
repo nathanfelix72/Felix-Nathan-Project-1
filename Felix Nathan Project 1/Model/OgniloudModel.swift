@@ -8,18 +8,12 @@
 import Foundation
 
 struct OgniloudModel {
-    // MARK - Nested Types
+    var topics: [OgniloudTopic]
     
-    
-    // MARK - Constants
-    
-    
-    // MARK - Properties
-    
-    
-    // MARK - Helpers
-    
-    
-    // MARK - Private Helpers
-
+    struct OgniloudTopic {
+        var id = UUID()
+        var title: String
+        var terms: [String : String]
+        var lesson: String
+    }
 }

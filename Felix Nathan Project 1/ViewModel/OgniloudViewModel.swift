@@ -13,12 +13,16 @@ import Foundation
     
     // Mark - Properties
     
+    private var model = OgniloudModel(topics: spanishTopics)
     
     // Mark - Initialization
     
     
     // Mark - Model Access
     
+    var topics: [OgniloudModel.OgniloudTopic] {
+        model.topics
+    }
     
     // Mark - User Intents
     

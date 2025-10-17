@@ -8,11 +8,22 @@
 import SwiftUI
 
 struct LessonView: View {
+    let topic: String
+    
     var body: some View {
-        Text("Lesson View")
+        Form {
+            Section(header: Text("Lesson about \(topic)")) {
+                Button(action: {
+                    // NEEDSWORK
+                }, label: {
+                    Text("Mark Complete")
+                })
+            }
+        }
+        .navigationTitle(topic)
     }
 }
 
 #Preview {
-    LessonView()
+    LessonView(topic: "Sample Topic")
 }

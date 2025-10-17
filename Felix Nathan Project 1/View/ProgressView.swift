@@ -1,5 +1,5 @@
 //
-//  IndividualTopicView.swift
+//  ProgressView.swift
 //  Ogniloud
 //
 //  Created by IS 543 on 10/11/25.

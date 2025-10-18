@@ -23,7 +23,7 @@ struct TopicsView: View {
                         if newValue { expandedTopics.insert(topic.id) } else { expandedTopics.remove(topic.id) }
                     })) {
                         ForEach(topic.subPages, id: \.self) { page in
-                            NavigationLink(destination: TopicPageView(page: page, topic: topic.title)) {
+                            NavigationLink(destination: TopicPageView(page: page, topic: topic.title, ogniloudViewModel: ogniloudViewModel)) {
                                 Text(page)
                             }
                         }
@@ -45,14 +45,15 @@ struct TopicsView: View {
 struct TopicPageView: View {
     let page: String
     let topic: String
-
+    let ogniloudViewModel: OgniloudViewModel
+    
     var body: some View {
         switch page {
         case "View Vocabulary List":
-            VocabularyListView(topic: topic)
+            VocabularyListView(topic: topic, terms: ogniloudViewModel.topics.first(where: { $0.title == topic })?.terms ?? [:])
                 .navigationTitle("\(topic) Vocabulary")
         case "Practice Flashcards":
-            FlashcardView(topic: topic)
+            FlashcardView(topic: topic, terms: ogniloudViewModel.topics.first(where: { $0.title == topic })?.terms ?? [:])
                 .navigationTitle("\(topic) Flashcards")
         case "Lesson":
             LessonView(topic: topic)

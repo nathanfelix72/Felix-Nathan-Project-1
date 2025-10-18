@@ -5,7 +5,7 @@
 //  Created by IS 543 on 10/11/25.
 //
 
-import Foundation
+import SwiftUI
 
 @Observable class OgniloudViewModel {
     // MARK - Constants
@@ -13,7 +13,7 @@ import Foundation
     
     // Mark - Properties
     
-    private var model = OgniloudModel(topics: spanishTopics)
+    private var model = OgniloudModel(topics: spanishTopics, flashcards: [])
     
     // Mark - Initialization
     
@@ -26,6 +26,11 @@ import Foundation
     
     // Mark - User Intents
     
+    func flipCard(_ flashcard: OgniloudModel.Flashcard) {
+        withAnimation(.easeIn(duration: 0.5)) {
+            model.flipCard(flashcard: flashcard)
+        }
+    }
     
     // Mark - Private Helpers
     

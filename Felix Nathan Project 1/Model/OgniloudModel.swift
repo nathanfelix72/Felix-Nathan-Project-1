@@ -12,7 +12,7 @@ struct OgniloudModel {
     var flashcards: Array<Flashcard>
     
     mutating func flipCard(flashcard: Flashcard) {
-        if let index = flashcards.firstIndex(where: { $0.id == flashcard.id }) {
+        if let index = flashcards.firstIndex(matching: flashcard) {
             flashcards[index].isFaceUp.toggle()
         }
     }

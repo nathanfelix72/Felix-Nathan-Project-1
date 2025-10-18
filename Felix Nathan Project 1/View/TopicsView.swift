@@ -53,7 +53,7 @@ struct TopicPageView: View {
             VocabularyListView(topic: topic, terms: ogniloudViewModel.topics.first(where: { $0.title == topic })?.terms ?? [:])
                 .navigationTitle("\(topic) Vocabulary")
         case "Practice Flashcards":
-            FlashcardView(topic: topic, terms: ogniloudViewModel.topics.first(where: { $0.title == topic })?.terms ?? [:])
+            FlashcardView(viewModel: OgniloudViewModel(), topic: topic, terms: ogniloudViewModel.topics.first(where: { $0.title == topic })?.terms ?? [:])
                 .navigationTitle("\(topic) Flashcards")
         case "Lesson":
             LessonView(topic: topic)

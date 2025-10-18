@@ -7,7 +7,12 @@
 
 import SwiftUI
 
+import SwiftUI
+
 struct FlashcardView: View {
+    
+    let viewModel: OgniloudViewModel
+    
     let topic: String
     let terms: [String: String]
     
@@ -19,13 +24,20 @@ struct FlashcardView: View {
 
     var body: some View {
         VStack() {
-            Flashcard(
-                flashcard: OgniloudModel.Flashcard(isFaceUp: true),
-                terms: [entries[currentIndex].term, entries[currentIndex].definition]
-            )
-            .frame(width: 250, height: 350)
-            .animation(.easeInOut, value: currentIndex)
-
+            let flashcards = viewModel.flashcards
+            
+            if currentIndex < flashcards.count {
+                Flashcard(
+                    flashcard: flashcards[currentIndex],
+                    terms: [entries[currentIndex].term, entries[currentIndex].definition]
+                )
+                .frame(width: 250, height: 350)
+                .animation(.easeInOut, value: currentIndex)
+                .onTapGesture {
+                    viewModel.flipCard(flashcards[currentIndex])
+                }
+            }
+            
             HStack {
                 Button("Previous") {
                     currentIndex = (currentIndex - 1 + entries.count) % entries.count
@@ -42,12 +54,15 @@ struct FlashcardView: View {
             .padding()
         }
         .padding()
+        .onAppear {
+            viewModel.initializeFlashcards(count: entries.count)
+        }
     }
 }
 
 
 #Preview {
-    FlashcardView(topic: "Sample Topic", terms: [
+    FlashcardView(viewModel: OgniloudViewModel(), topic: "Sample Topic", terms: [
         "Madre": "Mother",
         "Padre": "Father",
         "Hermano": "Brother",

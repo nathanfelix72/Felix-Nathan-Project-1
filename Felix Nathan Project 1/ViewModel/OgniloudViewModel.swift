@@ -24,7 +24,17 @@ import SwiftUI
         model.topics
     }
     
+    var flashcards: [OgniloudModel.Flashcard] {
+        model.flashcards
+    }
+    
     // Mark - User Intents
+    
+    func initializeFlashcards(count: Int) {
+            model.flashcards = (0..<count).map { _ in
+                OgniloudModel.Flashcard(isFaceUp: true)
+            }
+        }
     
     func flipCard(_ flashcard: OgniloudModel.Flashcard) {
         withAnimation(.easeIn(duration: 0.5)) {

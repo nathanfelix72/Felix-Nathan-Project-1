@@ -15,7 +15,7 @@ struct Flashcard: View {
         VStack {
             Color.clear
         }
-        .flashcardify(isFaceUp: flashcard.isFaceUp, term1: terms[0], term2: terms[1])
+        .flashcardify(isFaceUp: flashcard.isFaceUp, hasReviewed: flashcard.hasReviewed, term1: terms[0], term2: terms[1])
         .aspectRatio(3.0 / 4.0, contentMode: .fit)
     }
 }

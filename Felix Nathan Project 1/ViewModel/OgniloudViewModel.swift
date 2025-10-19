@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-@Observable class OgniloudViewModel {
+@Observable
+class OgniloudViewModel {
     // MARK - Constants
     
     
@@ -30,15 +31,25 @@ import SwiftUI
     
     // Mark - User Intents
     
-    func initializeFlashcards(count: Int) {
-            model.flashcards = (0..<count).map { _ in
-                OgniloudModel.Flashcard(isFaceUp: true)
+    func getFlashcards(for topicTitle: String) -> [OgniloudModel.Flashcard] {
+        let topic = model.topics.first(where: { $0.title == topicTitle })
+        return topic?.flashcards ?? []
+    }
+
+    
+    func initializeFlashcards(for topicTitle: String, count: Int) {
+        if let index = model.topics.firstIndex(where: { $0.title == topicTitle }) {
+            if model.topics[index].flashcards.isEmpty {
+                model.topics[index].flashcards = (0..<count).map { _ in
+                    OgniloudModel.Flashcard(isFaceUp: true)
+                }
             }
         }
-    
-    func flipCard(_ flashcard: OgniloudModel.Flashcard) {
+    }
+
+    func flipCard(_ flashcard: OgniloudModel.Flashcard, in topicTitle: String) {
         withAnimation(.easeIn(duration: 0.5)) {
-            model.flipCard(flashcard: flashcard)
+            model.flipCard(flashcard, in: topicTitle)
         }
     }
     

@@ -41,7 +41,6 @@ struct TopicsView: View {
     }
 }
 
-// I had chatGPT generate this for me
 struct TopicPageView: View {
     let page: String
     let topic: String
@@ -53,7 +52,7 @@ struct TopicPageView: View {
             VocabularyListView(topic: topic, terms: ogniloudViewModel.topics.first(where: { $0.title == topic })?.terms ?? [:])
                 .navigationTitle("\(topic) Vocabulary")
         case "Practice Flashcards":
-            FlashcardView(viewModel: OgniloudViewModel(), topic: topic, terms: ogniloudViewModel.topics.first(where: { $0.title == topic })?.terms ?? [:])
+            FlashcardView(viewModel: ogniloudViewModel, topic: topic, terms: ogniloudViewModel.topics.first(where: { $0.title == topic })?.terms ?? [:])
                 .navigationTitle("\(topic) Flashcards")
         case "Lesson":
             LessonView(topic: topic)

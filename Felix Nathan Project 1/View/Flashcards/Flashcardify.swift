@@ -8,10 +8,8 @@
 import SwiftUI
 
 struct Flashcardify: Animatable, ViewModifier {
-    var isFaceUp: Bool {
-        rotation < 90
-    }
-    
+    var isFaceUp: Bool { rotation < 90 }
+
     var animatableData: Double {
         get { rotation }
         set { rotation = newValue }
@@ -20,11 +18,13 @@ struct Flashcardify: Animatable, ViewModifier {
     var rotation: Double
     var term1: String
     var term2: String
-    
-    init(isFaceUp: Bool, term1: String, term2: String) {
+    var hasReviewed: Bool
+
+    init(isFaceUp: Bool, hasReviewed: Bool, term1: String, term2: String) {
         rotation = isFaceUp ? 0 : 180
         self.term1 = term1
         self.term2 = term2
+        self.hasReviewed = hasReviewed
     }
 
     func body(content: Content) -> some View {
@@ -36,14 +36,27 @@ struct Flashcardify: Animatable, ViewModifier {
                     .stroke(Color.black, lineWidth: 2)
                 
                 if isFaceUp {
-                    Text(term1)
-                        .font(.largeTitle)
-                        .bold()
+                    VStack(spacing: 8) {
+                        Text(term1)
+                            .font(.largeTitle)
+                            .bold()
+                        if hasReviewed {
+                            HStack(spacing: 6) {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(.green)
+                                Text("Reviewed")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                    }
+                    .padding()
                 } else {
                     Text(term2)
                         .font(.largeTitle)
                         .bold()
                         .rotation3DEffect(Angle(degrees: 180), axis: (x: 0, y: 1, z: 0))
+                        .padding()
                 }
             }
         }
@@ -52,7 +65,7 @@ struct Flashcardify: Animatable, ViewModifier {
 }
 
 extension View {
-    func flashcardify(isFaceUp: Bool, term1: String, term2: String) -> some View {
-        modifier(Flashcardify(isFaceUp: isFaceUp, term1: term1, term2: term2))
+    func flashcardify(isFaceUp: Bool, hasReviewed: Bool, term1: String, term2: String) -> some View {
+        modifier(Flashcardify(isFaceUp: isFaceUp, hasReviewed: hasReviewed, term1: term1, term2: term2))
     }
 }

@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct FlashcardView: View {
     
     let viewModel: OgniloudViewModel
@@ -24,7 +22,7 @@ struct FlashcardView: View {
 
     var body: some View {
         VStack() {
-            let flashcards = viewModel.flashcards
+            let flashcards = viewModel.getFlashcards(for: topic)
             
             if currentIndex < flashcards.count {
                 Flashcard(
@@ -34,7 +32,7 @@ struct FlashcardView: View {
                 .frame(width: 250, height: 350)
                 .animation(.easeInOut, value: currentIndex)
                 .onTapGesture {
-                    viewModel.flipCard(flashcards[currentIndex])
+                    viewModel.flipCard(flashcards[currentIndex], in: topic)
                 }
             }
             
@@ -55,7 +53,7 @@ struct FlashcardView: View {
         }
         .padding()
         .onAppear {
-            viewModel.initializeFlashcards(count: entries.count)
+            viewModel.initializeFlashcards(for: topic, count: entries.count)
         }
     }
 }

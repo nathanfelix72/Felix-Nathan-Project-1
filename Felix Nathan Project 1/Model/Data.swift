@@ -11,21 +11,45 @@ let spanishTopics = [
     OgniloudModel.OgniloudTopic(
         title: "Relationships",
         terms: [
-            "Madre" : "Mother",
-            "Padre" : "Father"
+            "Madre": "Mother",
+            "Padre": "Father"
         ],
-        lesson: """
+        lessonContent: """
             In Spanish, *mother* is _madre_ and *father* is _padre_.
+            
+            Family relationships are fundamental to Spanish culture. These basic terms will help you describe your family members.
             """,
-        subPages: ["View Vocabulary List", "Practice Flashcards", "Lesson", "Quiz", "View Progress"]),
+        quizQuestions: [
+            "Madre": "Mother",
+            "Padre": "Father"
+        ],
+        progress: [
+            "Lesson": "Not Started",
+            "Quiz": "Not Started",
+            "Flashcards": "0/2 reviewed"
+        ],
+        subPages: ["View Vocabulary List", "Practice Flashcards", "Lesson", "Quiz", "View Progress"]
+    ),
     OgniloudModel.OgniloudTopic(
         title: "Calendar",
         terms: [
-            "Lunes" : "Monday",
-            "Padre" : "Father"
+            "Lunes": "Monday",
+            "Martes": "Tuesday"
         ],
-        lesson: """
-            In Spanish, *mother* is _madre_ and *father* is _padre_.
+        lessonContent: """
+            The days of the week in Spanish are not capitalized unless they begin a sentence.
+            
+            Monday is *lunes* and Tuesday is *martes*.
             """,
-        subPages: ["View Vocabulary List", "Practice Flashcards", "Lesson", "Quiz", "View Progress"])
+        quizQuestions: [
+            "Lunes": "Monday",
+            "Martes": "Tuesday"
+        ],
+        progress: [
+            "Lesson": "Not Started",
+            "Quiz": "Not Started",
+            "Flashcards": "0/2 reviewed"
+        ],
+        subPages: ["View Vocabulary List", "Practice Flashcards", "Lesson", "Quiz", "View Progress"]
+    )
 ]

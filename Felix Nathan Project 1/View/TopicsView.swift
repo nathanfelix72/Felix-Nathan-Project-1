@@ -41,6 +41,7 @@ struct TopicsView: View {
     }
 }
 
+// I had chatGPT generate this for me
 struct TopicPageView: View {
     let page: String
     let topic: String
@@ -49,20 +50,34 @@ struct TopicPageView: View {
     var body: some View {
         switch page {
         case "View Vocabulary List":
-            VocabularyListView(topic: topic, terms: ogniloudViewModel.topics.first(where: { $0.title == topic })?.terms ?? [:])
-                .navigationTitle("\(topic) Vocabulary")
+            VocabularyListView(
+                topic: topic,
+                terms: ogniloudViewModel.topics.first(where: { $0.title == topic })?.terms ?? [:]
+            )
+            .navigationTitle("\(topic) Vocabulary")
         case "Practice Flashcards":
-            FlashcardView(viewModel: ogniloudViewModel, topic: topic, terms: ogniloudViewModel.topics.first(where: { $0.title == topic })?.terms ?? [:])
-                .navigationTitle("\(topic) Flashcards")
+            FlashcardView(
+                viewModel: ogniloudViewModel,
+                topic: topic,
+                terms: ogniloudViewModel.topics.first(where: { $0.title == topic })?.terms ?? [:]
+            )
+            .navigationTitle("\(topic) Flashcards")
         case "Lesson":
-            LessonView(topic: topic)
-                .navigationTitle("\(topic) Lesson")
+            LessonView(
+                viewModel: ogniloudViewModel,
+                topic: topic,
+                lessonContent: ogniloudViewModel.topics.first(where: { $0.title == topic })?.lessonContent ?? "No lesson content available."
+            )
+            .navigationTitle("\(topic) Lesson")
         case "Quiz":
             QuizView(topic: topic)
                 .navigationTitle("\(topic) Quiz")
         case "View Progress":
-            ProgressView(topic: topic)
-                .navigationTitle("\(topic) Progress")
+            ProgressView(
+                topic: topic,
+                progress: ogniloudViewModel.topics.first(where: { $0.title == topic })?.progress ?? [:]
+            )
+            .navigationTitle("\(topic) Progress")
         default:
             Text("Coming Soon")
                 .navigationTitle(topic)

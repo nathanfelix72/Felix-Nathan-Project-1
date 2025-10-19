@@ -8,22 +8,43 @@
 import SwiftUI
 
 struct LessonView: View {
+    let viewModel: OgniloudViewModel
     let topic: String
+    let lessonContent: String
     
+    @State private var isCompleted = false
+
     var body: some View {
-        Form {
-            Section(header: Text("Lesson about \(topic)")) {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                Text(lessonContent)
+                    .padding()
+                
                 Button(action: {
-                    // NEEDSWORK
-                }, label: {
-                    Text("Mark Complete")
-                })
+                    viewModel.markLessonComplete(for: topic)
+                    isCompleted = true
+                }) {
+                    HStack {
+                        Image(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
+                        Text(isCompleted ? "Lesson Completed" : "Mark Lesson Complete")
+                    }
+                }
+                .disabled(isCompleted)
             }
         }
-        .navigationTitle(topic)
+        .onAppear {
+            let progress = viewModel.getProgress(for: topic)
+            isCompleted = progress["Lesson"] == "Completed"
+        }
     }
 }
 
 #Preview {
-    LessonView(topic: "Sample Topic")
+    LessonView(
+        viewModel: OgniloudViewModel(),
+        topic: "Relationships",
+        lessonContent: """
+        In Spanish, *mother* is _madre_ and *father* is _padre_.
+        """
+    )
 }

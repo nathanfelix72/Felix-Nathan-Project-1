@@ -35,22 +35,23 @@ class OgniloudViewModel {
         let topic = model.topics.first(where: { $0.title == topicTitle })
         return topic?.flashcards ?? []
     }
-
     
     func initializeFlashcards(for topicTitle: String, count: Int) {
-        if let index = model.topics.firstIndex(where: { $0.title == topicTitle }) {
-            if model.topics[index].flashcards.isEmpty {
-                model.topics[index].flashcards = (0..<count).map { _ in
-                    OgniloudModel.Flashcard(isFaceUp: true)
-                }
-            }
-        }
+        model.initializeFlashcards(for: topicTitle, count: count)
     }
 
     func flipCard(_ flashcard: OgniloudModel.Flashcard, in topicTitle: String) {
         withAnimation(.easeIn(duration: 0.5)) {
             model.flipCard(flashcard, in: topicTitle)
         }
+    }
+    
+    func markLessonComplete(for topicTitle: String) {
+        model.markLessonComplete(for: topicTitle)
+    }
+    
+    func getProgress(for topicTitle: String) -> [String: String] {
+        return model.topics.first(where: { $0.title == topicTitle })?.progress ?? [:]
     }
     
     // Mark - Private Helpers

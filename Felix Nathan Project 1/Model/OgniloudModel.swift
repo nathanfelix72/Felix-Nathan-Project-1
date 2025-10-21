@@ -10,6 +10,7 @@ import Foundation
 struct OgniloudModel {
     var topics: [OgniloudTopic]
     var flashcards: Array<Flashcard>
+    var quizQuestions: Array<QuizQuestion>
     
     mutating func flipCard(_ flashcard: Flashcard, in topicTitle: String) {
         if let topicIndex = topics.firstIndex(where: { $0.title == topicTitle }),
@@ -32,6 +33,18 @@ struct OgniloudModel {
         }
     }
     
+    mutating func initializeQuizQuestions(for topicTitle: String) {
+        if let index = topics.firstIndex(where: { $0.title == topicTitle }) {
+            if topics[index].quizQuestions.isEmpty {
+                let quizData = topics[index].quizData
+                topics[index].quizQuestions = quizData.map { (question, answer) in
+                    QuizQuestion(question: question, correctAnswer: answer, answeredCorrectly: false)
+                }
+                topics[index].progress["Quiz"] = "0/\(quizData.count) correct"
+            }
+        }
+    }
+    
     mutating func markLessonComplete(for topicTitle: String) {
         if let index = topics.firstIndex(where: { $0.title == topicTitle }) {
             topics[index].progress["Lesson"] = "Completed"
@@ -45,19 +58,27 @@ struct OgniloudModel {
     }
     
     struct OgniloudTopic: Identifiable {
-        var id: UUID = UUID()
+        var id = UUID()
         var title: String
         var terms: [String: String]
         var lessonContent: String
-        var quizQuestions: [String: String]
+        var quizData: [String: String]
         var progress: [String: String]
         var flashcards: [Flashcard] = []
+        var quizQuestions: [QuizQuestion] = []
         var subPages: [String]
     }
     
     struct Flashcard: Identifiable {
-        fileprivate(set) var isFaceUp = false
         fileprivate(set) var id = UUID()
+        fileprivate(set) var isFaceUp = false
         fileprivate(set) var hasReviewed = false
+    }
+    
+    struct QuizQuestion: Identifiable {
+        fileprivate(set) var id = UUID()
+        fileprivate(set) var question: String
+        fileprivate(set) var correctAnswer: String
+        fileprivate(set) var answeredCorrectly = false
     }
 }

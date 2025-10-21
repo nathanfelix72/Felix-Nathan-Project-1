@@ -14,7 +14,7 @@ class OgniloudViewModel {
     
     // Mark - Properties
     
-    private var model = OgniloudModel(topics: spanishTopics, flashcards: [])
+    private var model = OgniloudModel(topics: spanishTopics, flashcards: [], quizQuestions: [])
     
     // Mark - Initialization
     
@@ -29,6 +29,10 @@ class OgniloudViewModel {
         model.flashcards
     }
     
+    var quizQuestions: [OgniloudModel.QuizQuestion] {
+        model.quizQuestions
+    }
+    
     // Mark - User Intents
     
     func getFlashcards(for topicTitle: String) -> [OgniloudModel.Flashcard] {
@@ -36,8 +40,17 @@ class OgniloudViewModel {
         return topic?.flashcards ?? []
     }
     
+    func getQuizQuestions(for topicTitle: String) -> [OgniloudModel.QuizQuestion] {
+        let topic = model.topics.first(where: { $0.title == topicTitle })
+        return topic?.quizQuestions ?? []
+    }
+    
     func initializeFlashcards(for topicTitle: String, count: Int) {
         model.initializeFlashcards(for: topicTitle, count: count)
+    }
+    
+    func initializeQuizQuestions(for topicTitle: String, count: Int) {
+        model.initializeQuizQuestions(for: topicTitle)
     }
 
     func flipCard(_ flashcard: OgniloudModel.Flashcard, in topicTitle: String) {

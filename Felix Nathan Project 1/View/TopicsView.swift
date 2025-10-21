@@ -70,8 +70,12 @@ struct TopicPageView: View {
             )
             .navigationTitle("\(topic) Lesson")
         case "Quiz":
-            QuizView(topic: topic)
-                .navigationTitle("\(topic) Quiz")
+            QuizView(
+                viewModel: ogniloudViewModel,
+                topic: topic,
+                quizQuestions: ogniloudViewModel.topics.first(where: { $0.title == topic })?.quizData ?? [:]
+            )
+            .navigationTitle("\(topic) Quiz")
         case "View Progress":
             ProgressView(
                 topic: topic,

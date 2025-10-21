@@ -19,7 +19,7 @@ let spanishTopics = [
             
             Family relationships are fundamental to Spanish culture. These basic terms will help you describe your family members.
             """,
-        quizQuestions: [
+        quizData: [
             "Madre": "Mother",
             "Padre": "Father"
         ],
@@ -41,7 +41,7 @@ let spanishTopics = [
             
             Monday is *lunes* and Tuesday is *martes*.
             """,
-        quizQuestions: [
+        quizData: [
             "Lunes": "Monday",
             "Martes": "Tuesday"
         ],

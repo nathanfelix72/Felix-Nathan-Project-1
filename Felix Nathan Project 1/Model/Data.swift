@@ -12,7 +12,13 @@ let spanishTopics = [
         title: "Relationships",
         terms: [
             "Madre": "Mother",
-            "Padre": "Father"
+            "Padre": "Father",
+            "Hermano": "Brother",
+            "Hermana": "Sister",
+            "Tio": "Uncle",
+            "Tia": "Aunt",
+            "Abuela": "Grandmother",
+            "Abuelo": "Grandfather"
         ],
         lessonContent: """
             In Spanish, *mother* is _madre_ and *father* is _padre_.

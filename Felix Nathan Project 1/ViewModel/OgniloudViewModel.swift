@@ -71,6 +71,22 @@ class OgniloudViewModel {
         model.submitQuizAnswer(for: topicTitle, questionId: questionId, userAnswer: userAnswer, isCorrect: isCorrect)
     }
     
+    func shuffleFlashcards(for topicTitle: String) {
+        guard let index = model.topics.firstIndex(where: { $0.title == topicTitle }) else { return }
+        model.topics[index].flashcards.shuffle()
+    }
+    
+    // ChatGPT helped me figure out what was wrong with this function
+    func resetProgress(for topicTitle: String, component: String) {
+        guard let topicIndex = model.topics.firstIndex(where: { $0.title == topicTitle }) else {
+            return
+        }
+        
+        if let componentEnum = OgniloudModel.LearningComponent(rawValue: component) {
+            model.resetProgress(for: topicIndex, component: componentEnum)
+        }
+    }
+    
     // Mark - Private Helpers
     
     

@@ -78,6 +78,7 @@ struct TopicPageView: View {
             .navigationTitle("\(topic) Quiz")
         case "View Progress":
             ProgressView(
+                viewModel: ogniloudViewModel,
                 topic: topic,
                 progress: ogniloudViewModel.topics.first(where: { $0.title == topic })?.progress ?? [:]
             )

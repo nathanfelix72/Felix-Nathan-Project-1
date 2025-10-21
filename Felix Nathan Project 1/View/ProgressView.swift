@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct ProgressView: View {
+    let viewModel: OgniloudViewModel
     let topic: String
     let progress: [String: String]
-
+    
     private var entries: [(term: String, definition: String)] {
         progress.map { (term: $0.key, definition: $0.value) }
             .sorted { $0.term < $1.term }
@@ -24,6 +25,10 @@ struct ProgressView: View {
                 Spacer()
                 Text(entry.definition)
                     .font(.subheadline)
+                Spacer()
+                Button("Reset") {
+                    viewModel.resetProgress(for: topic, component: entry.term)
+                }
             }
             .padding(.vertical, 8)
         }
@@ -32,9 +37,13 @@ struct ProgressView: View {
 }
 
 #Preview {
-    ProgressView(topic: "Sample Topic", progress: [
-        "Lesson": "Not Started",
-        "Quiz": "Not Started",
-        "Flashcards": "0/2 reviewed"
-    ])
+    ProgressView(
+        viewModel: OgniloudViewModel(),
+        topic: "Sample Topic",
+        progress: [
+            "Lesson": "Not Started",
+            "Quiz": "Not Started",
+            "Flashcards": "0/2 reviewed"
+        ]
+    )
 }

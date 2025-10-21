@@ -27,7 +27,7 @@ struct OgniloudModel {
             if topics[index].flashcards.isEmpty {
                 topics[index].flashcards = (0..<count).map { _ in
                     Flashcard(isFaceUp: true)
-                }
+                }.shuffled()
                 topics[index].progress["Flashcards"] = "0/\(count) reviewed"
             }
         }
@@ -36,7 +36,7 @@ struct OgniloudModel {
     mutating func initializeQuizQuestions(for topicTitle: String) {
         if let index = topics.firstIndex(where: { $0.title == topicTitle }) {
             if topics[index].quizQuestions.isEmpty {
-                let quizData = topics[index].quizData
+                let quizData = topics[index].quizData.shuffled()
                 topics[index].quizQuestions = quizData.map { (question, answer) in
                     QuizQuestion(question: question, correctAnswer: answer, answeredCorrectly: false)
                 }
@@ -71,6 +71,34 @@ struct OgniloudModel {
         let reviewedCount = topics[topicIndex].flashcards.filter { $0.hasReviewed }.count
         let totalCount = topics[topicIndex].flashcards.count
         topics[topicIndex].progress["Flashcards"] = "\(reviewedCount)/\(totalCount) reviewed"
+    }
+    
+    mutating func resetProgress(for topicIndex: Int, component: LearningComponent) {
+        switch component {
+        case .lesson:
+            topics[topicIndex].progress["Lesson"] = "Not Started"
+            
+        case .quiz:
+            for i in topics[topicIndex].quizQuestions.indices {
+                topics[topicIndex].quizQuestions[i].userAnswer = nil
+                topics[topicIndex].quizQuestions[i].hasSubmitted = false
+                topics[topicIndex].quizQuestions[i].answeredCorrectly = false
+            }
+            topics[topicIndex].progress["Quiz"] = "0/\(topics[topicIndex].quizQuestions.count) correct"
+            
+        case .flashcards:
+            for i in topics[topicIndex].flashcards.indices {
+                topics[topicIndex].flashcards[i].hasReviewed = false
+                topics[topicIndex].flashcards[i].isFaceUp = true
+            }
+            topics[topicIndex].progress["Flashcards"] = "0/\(topics[topicIndex].flashcards.count) reviewed"
+        }
+    }
+    
+    enum LearningComponent: String, CaseIterable {
+        case lesson = "Lesson"
+        case quiz = "Quiz"
+        case flashcards = "Flashcards"
     }
     
     struct OgniloudTopic: Identifiable {

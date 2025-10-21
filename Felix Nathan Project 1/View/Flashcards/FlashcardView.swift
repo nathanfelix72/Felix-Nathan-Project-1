@@ -54,6 +54,7 @@ struct FlashcardView: View {
         .padding()
         .onAppear {
             viewModel.initializeFlashcards(for: topic, count: entries.count)
+            viewModel.shuffleFlashcards(for: topic)
         }
     }
 }

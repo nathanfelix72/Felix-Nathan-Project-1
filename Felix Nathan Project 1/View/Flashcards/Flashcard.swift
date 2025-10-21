@@ -8,8 +8,13 @@
 import SwiftUI
 
 struct Flashcard: View {
+    
+    // MARK: - Properties
+    
     let flashcard: OgniloudModel.Flashcard
     let terms: [String]
+    
+    // MARK: - Body
     
     var body: some View {
         VStack {

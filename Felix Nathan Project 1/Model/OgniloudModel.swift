@@ -8,9 +8,14 @@
 import Foundation
 
 struct OgniloudModel {
-    var topics: [OgniloudTopic]
-    var flashcards: Array<Flashcard>
-    var quizQuestions: Array<QuizQuestion>
+    
+    // MARK: - Properties
+    
+    private(set) var topics: [OgniloudTopic]
+    private(set) var flashcards: Array<Flashcard>
+    private(set) var quizQuestions: Array<QuizQuestion>
+    
+    // MARK: - User Intents
     
     mutating func flipCard(_ flashcard: Flashcard, in topicTitle: String) {
         if let topicIndex = topics.firstIndex(where: { $0.title == topicTitle }),
@@ -60,18 +65,6 @@ struct OgniloudModel {
             updateQuizProgress(for: topicIndex)
         }
     }
-
-    private mutating func updateQuizProgress(for topicIndex: Int) {
-        let correctCount = topics[topicIndex].quizQuestions.filter { $0.answeredCorrectly }.count
-        let totalCount = topics[topicIndex].quizQuestions.count
-        topics[topicIndex].progress["Quiz"] = "\(correctCount)/\(totalCount) correct"
-    }
-    
-    private mutating func updateFlashcardProgress(for topicIndex: Int) {
-        let reviewedCount = topics[topicIndex].flashcards.filter { $0.hasReviewed }.count
-        let totalCount = topics[topicIndex].flashcards.count
-        topics[topicIndex].progress["Flashcards"] = "\(reviewedCount)/\(totalCount) reviewed"
-    }
     
     mutating func resetProgress(for topicIndex: Int, component: LearningComponent) {
         switch component {
@@ -95,6 +88,28 @@ struct OgniloudModel {
         }
     }
     
+    mutating func shuffleFlashcards(for topicTitle: String) {
+        if let index = topics.firstIndex(where: { $0.title == topicTitle }) {
+            topics[index].flashcards.shuffle()
+        }
+    }
+    
+    // MARK: - Private Helpers
+    
+    private mutating func updateQuizProgress(for topicIndex: Int) {
+        let correctCount = topics[topicIndex].quizQuestions.filter { $0.answeredCorrectly }.count
+        let totalCount = topics[topicIndex].quizQuestions.count
+        topics[topicIndex].progress["Quiz"] = "\(correctCount)/\(totalCount) correct"
+    }
+    
+    private mutating func updateFlashcardProgress(for topicIndex: Int) {
+        let reviewedCount = topics[topicIndex].flashcards.filter { $0.hasReviewed }.count
+        let totalCount = topics[topicIndex].flashcards.count
+        topics[topicIndex].progress["Flashcards"] = "\(reviewedCount)/\(totalCount) reviewed"
+    }
+    
+    // MARK: - Nested Types
+    
     enum LearningComponent: String, CaseIterable {
         case lesson = "Lesson"
         case quiz = "Quiz"
@@ -114,12 +129,18 @@ struct OgniloudModel {
     }
     
     struct Flashcard: Identifiable {
+        
+        // MARK: - Properties
+        
         fileprivate(set) var id = UUID()
         fileprivate(set) var isFaceUp = false
         fileprivate(set) var hasReviewed = false
     }
     
     struct QuizQuestion: Identifiable {
+        
+        // MARK: - Properties
+        
         fileprivate(set) var id = UUID()
         fileprivate(set) var question: String
         fileprivate(set) var correctAnswer: String

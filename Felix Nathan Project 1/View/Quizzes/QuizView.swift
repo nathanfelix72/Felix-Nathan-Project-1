@@ -9,7 +9,10 @@ import SwiftUI
 
 struct QuizView: View {
     
+    // MARK: - Properties
+    
     @Bindable var viewModel: OgniloudViewModel
+    
     let topic: String
     let quizQuestions: [String: String]
     
@@ -17,6 +20,8 @@ struct QuizView: View {
     @State private var userAnswer = ""
     @State private var hasSubmitted = false
     @State private var entries: [OgniloudModel.QuizQuestion] = []
+    
+    // MARK: - Body
     
     var body: some View {
         VStack {

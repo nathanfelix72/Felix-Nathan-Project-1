@@ -8,12 +8,17 @@
 import SwiftUI
 
 struct LessonView: View {
+    
+    // MARK: - Properties
+    
     let viewModel: OgniloudViewModel
     let topic: String
     let lessonContent: String
     
     @State private var isCompleted = false
 
+    // MARK: - Body
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {

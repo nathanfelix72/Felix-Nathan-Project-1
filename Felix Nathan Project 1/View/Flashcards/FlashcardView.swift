@@ -9,17 +9,22 @@ import SwiftUI
 
 struct FlashcardView: View {
     
-    let viewModel: OgniloudViewModel
+    // MARK: - Properties
     
+    let viewModel: OgniloudViewModel
     let topic: String
     let terms: [String: String]
     
     @State private var currentIndex = 0
     
+    // MARK: - Computed Properties
+    
     private var entries: [(term: String, definition: String)] {
         terms.map { (term: $0.key, definition: $0.value) }
     }
 
+    // MARK: - Body
+    
     var body: some View {
         VStack() {
             let flashcards = viewModel.getFlashcards(for: topic)

@@ -9,10 +9,14 @@ import SwiftUI
 
 struct TopicsView: View {
     
+    // MARK: - Properties
+    
     var ogniloudViewModel: OgniloudViewModel
 
     @State private var expandedTopics: Set<UUID> = []
 
+    // MARK: - Body
+    
     var body: some View {
         NavigationStack {
             List {
@@ -52,35 +56,35 @@ struct TopicPageView: View {
         case "View Vocabulary List":
             VocabularyListView(
                 topic: topic,
-                terms: ogniloudViewModel.topics.first(where: { $0.title == topic })?.terms ?? [:]
+                terms: ogniloudViewModel.getTerms(for: topic)
             )
             .navigationTitle("\(topic) Vocabulary")
         case "Practice Flashcards":
             FlashcardView(
                 viewModel: ogniloudViewModel,
                 topic: topic,
-                terms: ogniloudViewModel.topics.first(where: { $0.title == topic })?.terms ?? [:]
+                terms: ogniloudViewModel.getTerms(for: topic)
             )
             .navigationTitle("\(topic) Flashcards")
         case "Lesson":
             LessonView(
                 viewModel: ogniloudViewModel,
                 topic: topic,
-                lessonContent: ogniloudViewModel.topics.first(where: { $0.title == topic })?.lessonContent ?? "No lesson content available."
+                lessonContent: ogniloudViewModel.getLessonContent(for: topic)
             )
             .navigationTitle("\(topic) Lesson")
         case "Quiz":
             QuizView(
                 viewModel: ogniloudViewModel,
                 topic: topic,
-                quizQuestions: ogniloudViewModel.topics.first(where: { $0.title == topic })?.quizData ?? [:]
+                quizQuestions: ogniloudViewModel.getQuizData(for: topic)
             )
             .navigationTitle("\(topic) Quiz")
         case "View Progress":
             ProgressView(
                 viewModel: ogniloudViewModel,
                 topic: topic,
-                progress: ogniloudViewModel.topics.first(where: { $0.title == topic })?.progress ?? [:]
+                progress: ogniloudViewModel.getProgress(for: topic)
             )
             .navigationTitle("\(topic) Progress")
         default:

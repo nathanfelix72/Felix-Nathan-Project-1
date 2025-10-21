@@ -8,10 +8,17 @@
 import SwiftUI
 
 struct QuizQuestion: View {
+    
+    // MARK: - Properties
+    
     let quizQuestion: OgniloudModel.QuizQuestion
+    
     @Binding var userAnswer: String
     @Binding var hasSubmitted: Bool
+    
     let onSubmit: () -> Void
+    
+    // MARK: - Body
     
     var body: some View {
         VStack {

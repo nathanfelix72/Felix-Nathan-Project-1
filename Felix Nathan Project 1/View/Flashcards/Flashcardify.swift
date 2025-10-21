@@ -8,6 +8,25 @@
 import SwiftUI
 
 struct Flashcardify: Animatable, ViewModifier {
+    
+    // MARK: - Constants
+    
+    private struct Constants {
+        static let cornerRadius = 25.0
+        static let strokeWidth = 2.0
+        static let iconSpacing = 6.0
+        static let spacing = 8.0
+    }
+    
+    // MARK: - Properties
+    
+    var rotation: Double
+    var term1: String
+    var term2: String
+    var hasReviewed: Bool
+    
+    // MARK: - Computed Properties
+    
     var isFaceUp: Bool { rotation < 90 }
 
     var animatableData: Double {
@@ -15,10 +34,7 @@ struct Flashcardify: Animatable, ViewModifier {
         set { rotation = newValue }
     }
     
-    var rotation: Double
-    var term1: String
-    var term2: String
-    var hasReviewed: Bool
+    // MARK: - Initialization
 
     init(isFaceUp: Bool, hasReviewed: Bool, term1: String, term2: String) {
         rotation = isFaceUp ? 0 : 180
@@ -27,21 +43,23 @@ struct Flashcardify: Animatable, ViewModifier {
         self.hasReviewed = hasReviewed
     }
 
+    // MARK: - Body
+    
     func body(content: Content) -> some View {
         GeometryReader { geometry in
             ZStack {
-                RoundedRectangle(cornerRadius: 25)
+                RoundedRectangle(cornerRadius: Constants.cornerRadius)
                     .fill(Color.white)
-                RoundedRectangle(cornerRadius: 25)
-                    .stroke(Color.black, lineWidth: 2)
+                RoundedRectangle(cornerRadius: Constants.cornerRadius)
+                    .stroke(Color.black, lineWidth: Constants.strokeWidth)
                 
                 if isFaceUp {
-                    VStack(spacing: 8) {
+                    VStack(spacing: Constants.spacing) {
                         Text(term1)
                             .font(.largeTitle)
                             .bold()
                         if hasReviewed {
-                            HStack(spacing: 6) {
+                            HStack(spacing: Constants.iconSpacing) {
                                 Image(systemName: "checkmark.circle.fill")
                                     .foregroundColor(.green)
                                 Text("Reviewed")

@@ -8,22 +8,42 @@
 import SwiftUI
 
 struct Quizzify: ViewModifier {
+    
+    // MARK: - Constants
+    
+    private struct Constants {
+        static let cornerRadius = 10.0
+        static let iconSpacing = 8.0
+        static let spacing = 12.0
+        static let verticalSpacing = 16.0
+        static let buttonPadding = 12.0
+        static let answerSpacing = 4.0
+    }
+    
+    // MARK: - Properties
+    
     var question: String
     var correctAnswer: String
     var answeredCorrectly: Bool
+    
     @Binding var userAnswer: String
     @Binding var hasSubmitted: Bool
+    
     let onSubmit: () -> Void
+    
+    // MARK: - Computed Properties
     
     private var isCorrect: Bool {
         userAnswer.lowercased().trimmingCharacters(in: .whitespaces) ==
         correctAnswer.lowercased().trimmingCharacters(in: .whitespaces)
     }
 
+    // MARK: - Body
+    
     func body(content: Content) -> some View {
         GeometryReader { geometry in
             ZStack {
-                VStack(spacing: 16) {
+                VStack(spacing: Constants.verticalSpacing) {
                     Text(question)
                         .font(.title2)
                         .bold()
@@ -33,7 +53,7 @@ struct Quizzify: ViewModifier {
                     Spacer()
                     
                     if !hasSubmitted {
-                        VStack(spacing: 12) {
+                        VStack(spacing: Constants.spacing) {
                             TextField("Your answer", text: $userAnswer)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                                 .padding(.horizontal)
@@ -43,16 +63,16 @@ struct Quizzify: ViewModifier {
                                     .font(.headline)
                                     .foregroundColor(.white)
                                     .frame(maxWidth: .infinity)
-                                    .padding(.vertical, 12)
+                                    .padding(.vertical, Constants.buttonPadding)
                                     .background(userAnswer.isEmpty ? Color.gray : Color.blue)
-                                    .cornerRadius(10)
+                                    .cornerRadius(Constants.cornerRadius)
                             }
                             .disabled(userAnswer.isEmpty)
                             .padding(.horizontal)
                         }
                     } else {
-                        VStack(spacing: 12) {
-                            HStack(spacing: 8) {
+                        VStack(spacing: Constants.spacing) {
+                            HStack(spacing: Constants.iconSpacing) {
                                 Image(systemName: isCorrect ? "checkmark.circle.fill" : "xmark.circle.fill")
                                     .foregroundColor(isCorrect ? .green : .red)
                                     .font(.title)
@@ -62,7 +82,7 @@ struct Quizzify: ViewModifier {
                                     .foregroundColor(isCorrect ? .green : .red)
                             }
                             
-                            VStack(spacing: 4) {
+                            VStack(spacing: Constants.answerSpacing) {
                                 Text("Your answer: \(userAnswer)")
                                     .foregroundColor(isCorrect ? .primary : .secondary)
                                     .font(.subheadline)

@@ -9,40 +9,33 @@ import SwiftUI
 
 @Observable
 class OgniloudViewModel {
-    // MARK - Constants
     
+    // MARK: - Constants
     
-    // Mark - Properties
+    private struct Constants {
+        static let animationDuration = 0.5
+    }
+    
+    // MARK: - Properties
     
     private var model = OgniloudModel(topics: spanishTopics, flashcards: [], quizQuestions: [])
     
-    // Mark - Initialization
+    // MARK: - Initialization
     
-    
-    // Mark - Model Access
+    // MARK: - Model Access
     
     var topics: [OgniloudModel.OgniloudTopic] {
         model.topics
     }
     
-    var flashcards: [OgniloudModel.Flashcard] {
-        model.flashcards
-    }
-    
-    var quizQuestions: [OgniloudModel.QuizQuestion] {
-        model.quizQuestions
-    }
-    
-    // Mark - User Intents
+    // MARK: - User Intents
     
     func getFlashcards(for topicTitle: String) -> [OgniloudModel.Flashcard] {
-        let topic = model.topics.first(where: { $0.title == topicTitle })
-        return topic?.flashcards ?? []
+        model.topics.first(where: { $0.title == topicTitle })?.flashcards ?? []
     }
     
     func getQuizQuestions(for topicTitle: String) -> [OgniloudModel.QuizQuestion] {
-        let topic = model.topics.first(where: { $0.title == topicTitle })
-        return topic?.quizQuestions ?? []
+        model.topics.first(where: { $0.title == topicTitle })?.quizQuestions ?? []
     }
     
     func initializeFlashcards(for topicTitle: String, count: Int) {
@@ -54,7 +47,7 @@ class OgniloudViewModel {
     }
 
     func flipCard(_ flashcard: OgniloudModel.Flashcard, in topicTitle: String) {
-        withAnimation(.easeIn(duration: 0.5)) {
+        withAnimation(.easeIn(duration: Constants.animationDuration)) {
             model.flipCard(flashcard, in: topicTitle)
         }
     }
@@ -64,7 +57,19 @@ class OgniloudViewModel {
     }
     
     func getProgress(for topicTitle: String) -> [String: String] {
-        return model.topics.first(where: { $0.title == topicTitle })?.progress ?? [:]
+        model.topics.first(where: { $0.title == topicTitle })?.progress ?? [:]
+    }
+    
+    func getTerms(for topicTitle: String) -> [String: String] {
+        model.topics.first(where: { $0.title == topicTitle })?.terms ?? [:]
+    }
+    
+    func getLessonContent(for topicTitle: String) -> String {
+        model.topics.first(where: { $0.title == topicTitle })?.lessonContent ?? "No lesson content available."
+    }
+    
+    func getQuizData(for topicTitle: String) -> [String: String] {
+        model.topics.first(where: { $0.title == topicTitle })?.quizData ?? [:]
     }
     
     func submitQuizAnswer(for topicTitle: String, questionId: UUID, userAnswer: String, isCorrect: Bool) {
@@ -72,8 +77,7 @@ class OgniloudViewModel {
     }
     
     func shuffleFlashcards(for topicTitle: String) {
-        guard let index = model.topics.firstIndex(where: { $0.title == topicTitle }) else { return }
-        model.topics[index].flashcards.shuffle()
+        model.shuffleFlashcards(for: topicTitle)
     }
     
     // ChatGPT helped me figure out what was wrong with this function
@@ -87,7 +91,5 @@ class OgniloudViewModel {
         }
     }
     
-    // Mark - Private Helpers
-    
-    
+    // MARK: - Private Helpers
 }

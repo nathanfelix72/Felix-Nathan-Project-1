@@ -8,15 +8,22 @@
 import SwiftUI
 
 struct ProgressView: View {
+    
+    // MARK: - Properties
+    
     let viewModel: OgniloudViewModel
     let topic: String
     let progress: [String: String]
+    
+    // MARK: - Computed Properties
     
     private var entries: [(term: String, definition: String)] {
         progress.map { (term: $0.key, definition: $0.value) }
             .sorted { $0.term < $1.term }
     }
 
+    // MARK: - Body
+    
     var body: some View {
         List(entries, id: \.term) { entry in
             HStack {

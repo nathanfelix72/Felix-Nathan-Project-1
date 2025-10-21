@@ -9,7 +9,12 @@ import Foundation
 import AVFoundation
 
 struct SoundPlayer {
+    
+    // MARK: - Properties
+    
     var player: AVAudioPlayer?
+    
+    // MARK: - Methods
     
     mutating func playSound(named soundName: String) {
         guard let path = Bundle.main.path(forResource: soundName, ofType: nil) else {

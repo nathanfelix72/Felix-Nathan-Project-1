@@ -8,14 +8,21 @@
 import SwiftUI
 
 struct VocabularyListView: View {
+    
+    // MARK: - Properties
+    
     let topic: String
     let terms: [String: String]
 
+    // MARK: - Computed Properties
+    
     private var entries: [(term: String, definition: String)] {
         terms.map { (term: $0.key, definition: $0.value) }
             .sorted { $0.term < $1.term }
     }
 
+    // MARK: - Body
+    
     var body: some View {
         List(entries, id: \.term) { entry in
             HStack {

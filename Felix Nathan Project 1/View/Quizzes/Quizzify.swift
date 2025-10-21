@@ -7,64 +7,100 @@
 
 import SwiftUI
 
-struct Quizzify: Animatable, ViewModifier {
-
-    var animatableData: Double {
-        get { rotation }
-        set { rotation = newValue }
-    }
-    
-    var rotation: Double
+struct Quizzify: ViewModifier {
     var question: String
     var correctAnswer: String
     var answeredCorrectly: Bool
-
-    init(question: String, correctAnswer: String, answeredCorrectly: Bool) {
-        rotation = answeredCorrectly ? 0 : 180
-        self.question = question
-        self.correctAnswer = correctAnswer
-        self.answeredCorrectly = answeredCorrectly
+    @Binding var userAnswer: String
+    @Binding var hasSubmitted: Bool
+    let onSubmit: () -> Void
+    
+    private var isCorrect: Bool {
+        userAnswer.lowercased().trimmingCharacters(in: .whitespaces) ==
+        correctAnswer.lowercased().trimmingCharacters(in: .whitespaces)
     }
 
     func body(content: Content) -> some View {
         GeometryReader { geometry in
             ZStack {
-                RoundedRectangle(cornerRadius: 25)
-                    .fill(Color.white)
-                RoundedRectangle(cornerRadius: 25)
-                    .stroke(Color.black, lineWidth: 2)
-                
-                if answeredCorrectly {
-                    VStack(spacing: 8) {
-                        Text(question)
-                            .font(.largeTitle)
-                            .bold()
-                        if answeredCorrectly {
-                            HStack(spacing: 6) {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .foregroundColor(.green)
-                                Text("Reviewed")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
+                VStack(spacing: 16) {
+                    Text(question)
+                        .font(.title2)
+                        .bold()
+                        .multilineTextAlignment(.center)
+                        .padding(.top)
+                    
+                    Spacer()
+                    
+                    if !hasSubmitted {
+                        VStack(spacing: 12) {
+                            TextField("Your answer", text: $userAnswer)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .padding(.horizontal)
+                            
+                            Button(action: onSubmit) {
+                                Text("Submit")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 12)
+                                    .background(userAnswer.isEmpty ? Color.gray : Color.blue)
+                                    .cornerRadius(10)
+                            }
+                            .disabled(userAnswer.isEmpty)
+                            .padding(.horizontal)
+                        }
+                    } else {
+                        VStack(spacing: 12) {
+                            HStack(spacing: 8) {
+                                Image(systemName: isCorrect ? "checkmark.circle.fill" : "xmark.circle.fill")
+                                    .foregroundColor(isCorrect ? .green : .red)
+                                    .font(.title)
+                                Text(isCorrect ? "Correct!" : "Incorrect")
+                                    .font(.title3)
+                                    .bold()
+                                    .foregroundColor(isCorrect ? .green : .red)
+                            }
+                            
+                            VStack(spacing: 4) {
+                                Text("Your answer: \(userAnswer)")
+                                    .foregroundColor(isCorrect ? .primary : .secondary)
+                                    .font(.subheadline)
+                                if !isCorrect {
+                                    Text("Correct answer: \(correctAnswer)")
+                                        .foregroundColor(.green)
+                                        .bold()
+                                        .font(.subheadline)
+                                }
                             }
                         }
+                        .padding(.horizontal)
                     }
-                    .padding()
-                } else {
-                    Text(correctAnswer)
-                        .font(.largeTitle)
-                        .bold()
-                        .rotation3DEffect(Angle(degrees: 180), axis: (x: 0, y: 1, z: 0))
-                        .padding()
+                    
+                    Spacer()
                 }
+                .padding()
             }
         }
-        .rotation3DEffect(Angle(degrees: rotation), axis: (x: 0, y: 1, z: 0))
     }
 }
 
 extension View {
-    func quizzify(question: String, correctAnswer: String, answeredCorrectly: Bool) -> some View {
-        modifier(Quizzify(question: question, correctAnswer: correctAnswer, answeredCorrectly: answeredCorrectly))
+    func quizzify(
+        question: String,
+        correctAnswer: String,
+        answeredCorrectly: Bool,
+        userAnswer: Binding<String>,
+        hasSubmitted: Binding<Bool>,
+        onSubmit: @escaping () -> Void
+    ) -> some View {
+        modifier(Quizzify(
+            question: question,
+            correctAnswer: correctAnswer,
+            answeredCorrectly: answeredCorrectly,
+            userAnswer: userAnswer,
+            hasSubmitted: hasSubmitted,
+            onSubmit: onSubmit
+        ))
     }
 }

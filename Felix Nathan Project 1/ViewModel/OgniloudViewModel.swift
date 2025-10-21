@@ -67,6 +67,10 @@ class OgniloudViewModel {
         return model.topics.first(where: { $0.title == topicTitle })?.progress ?? [:]
     }
     
+    func submitQuizAnswer(for topicTitle: String, questionId: UUID, userAnswer: String, isCorrect: Bool) {
+        model.submitQuizAnswer(for: topicTitle, questionId: questionId, userAnswer: userAnswer, isCorrect: isCorrect)
+    }
+    
     // Mark - Private Helpers
     
     

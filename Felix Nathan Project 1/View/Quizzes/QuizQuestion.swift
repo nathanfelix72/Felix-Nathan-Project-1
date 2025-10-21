@@ -9,18 +9,32 @@ import SwiftUI
 
 struct QuizQuestion: View {
     let quizQuestion: OgniloudModel.QuizQuestion
+    @Binding var userAnswer: String
+    @Binding var hasSubmitted: Bool
+    let onSubmit: () -> Void
     
     var body: some View {
         VStack {
             Color.clear
         }
-        .quizzify(question: quizQuestion.question, correctAnswer: quizQuestion.correctAnswer, answeredCorrectly: false)
+        .quizzify(
+            question: quizQuestion.question,
+            correctAnswer: quizQuestion.correctAnswer,
+            answeredCorrectly: quizQuestion.answeredCorrectly,
+            userAnswer: $userAnswer,
+            hasSubmitted: $hasSubmitted,
+            onSubmit: onSubmit
+        )
         .aspectRatio(3.0 / 4.0, contentMode: .fit)
     }
 }
 
 #Preview {
-    QuizQuestion(quizQuestion: OgniloudModel.QuizQuestion(question: "Madre", correctAnswer: "Mother", answeredCorrectly: false))
+    QuizQuestion(
+        quizQuestion: OgniloudModel.QuizQuestion(question: "What is 'Madre' in English?", correctAnswer: "Mother", answeredCorrectly: false),
+        userAnswer: .constant(""),
+        hasSubmitted: .constant(false),
+        onSubmit: {}
+    )
         .padding()
 }
-

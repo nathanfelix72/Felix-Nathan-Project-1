@@ -51,6 +51,22 @@ struct OgniloudModel {
         }
     }
     
+    mutating func submitQuizAnswer(for topicTitle: String, questionId: UUID, userAnswer: String, isCorrect: Bool) {
+        if let topicIndex = topics.firstIndex(where: { $0.title == topicTitle }),
+           let questionIndex = topics[topicIndex].quizQuestions.firstIndex(where: { $0.id == questionId }) {
+            topics[topicIndex].quizQuestions[questionIndex].userAnswer = userAnswer
+            topics[topicIndex].quizQuestions[questionIndex].answeredCorrectly = isCorrect
+            
+            updateQuizProgress(for: topicIndex)
+        }
+    }
+
+    private mutating func updateQuizProgress(for topicIndex: Int) {
+        let correctCount = topics[topicIndex].quizQuestions.filter { $0.answeredCorrectly }.count
+        let totalCount = topics[topicIndex].quizQuestions.count
+        topics[topicIndex].progress["Quiz"] = "\(correctCount)/\(totalCount) correct"
+    }
+    
     private mutating func updateFlashcardProgress(for topicIndex: Int) {
         let reviewedCount = topics[topicIndex].flashcards.filter { $0.hasReviewed }.count
         let totalCount = topics[topicIndex].flashcards.count
@@ -79,6 +95,8 @@ struct OgniloudModel {
         fileprivate(set) var id = UUID()
         fileprivate(set) var question: String
         fileprivate(set) var correctAnswer: String
+        fileprivate(set) var userAnswer: String? = nil
+        fileprivate(set) var hasSubmitted: Bool = false
         fileprivate(set) var answeredCorrectly = false
     }
 }

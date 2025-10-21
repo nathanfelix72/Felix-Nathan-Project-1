@@ -9,60 +9,91 @@ import SwiftUI
 
 struct QuizView: View {
     
-    let viewModel: OgniloudViewModel
-    
+    @Bindable var viewModel: OgniloudViewModel
     let topic: String
     let quizQuestions: [String: String]
     
     @State private var currentIndex = 0
+    @State private var userAnswer = ""
+    @State private var hasSubmitted = false
+    @State private var entries: [OgniloudModel.QuizQuestion] = []
     
-    private var entries: [(term: String, definition: String)] {
-        quizQuestions.map { (term: $0.key, definition: $0.value) }
-    }
-
     var body: some View {
-        VStack() {
-            let quizQuestions = viewModel.getQuizQuestions(for: topic)
-            
-            if currentIndex < quizQuestions.count {
+        VStack {
+            if !entries.isEmpty && entries.indices.contains(currentIndex) {
                 QuizQuestion(
-                    quizQuestion: quizQuestions[currentIndex]
+                    quizQuestion: entries[currentIndex],
+                    userAnswer: $userAnswer,
+                    hasSubmitted: $hasSubmitted,
+                    onSubmit: submitAnswer
                 )
-                .frame(width: 250, height: 350)
-                .animation(.easeInOut, value: currentIndex)
-                .onTapGesture {
-//                    viewModel.flipCard(quizQuestions[currentIndex], in: topic)
+                .id(entries[currentIndex].id)
+                
+                HStack {
+                    Button("Previous") {
+                        currentIndex -= 1
+                        loadCurrentQuestion()
+                    }
+                    .disabled(currentIndex == 0)
+                    
+                    Spacer()
+                    
+                    Button("Next") {
+                        currentIndex += 1
+                        loadCurrentQuestion()
+                    }
+                    .disabled(currentIndex >= (entries.count - 1))
                 }
+                .padding()
+            } else {
+                Text("Loading quiz...")
+                    .padding()
             }
-            
-            HStack {
-                Button("Previous") {
-                    currentIndex = (currentIndex - 1 + entries.count) % entries.count
-                }
-                .disabled(currentIndex == 0)
-
-                Spacer()
-
-                Button("Next") {
-                    currentIndex = (currentIndex + 1) % entries.count
-                }
-                .disabled(currentIndex == entries.count - 1)
-            }
-            .padding()
         }
         .padding()
         .onAppear {
-            viewModel.initializeQuizQuestions(for: topic, count: entries.count)
+            viewModel.initializeQuizQuestions(for: topic, count: quizQuestions.count)
+            
+            entries = viewModel.getQuizQuestions(for: topic)
+            currentIndex = 0
+            
+            loadCurrentQuestion()
         }
+    }
+    
+    // MARK: - Helpers
+    
+    private func loadCurrentQuestion() {
+        guard entries.indices.contains(currentIndex) else {
+            userAnswer = ""
+            hasSubmitted = false
+            return
+        }
+        let current = entries[currentIndex]
+        userAnswer = current.userAnswer ?? ""
+        hasSubmitted = current.userAnswer != nil
+    }
+    
+    private func submitAnswer() {
+        let isCorrect = userAnswer.lowercased().trimmingCharacters(in: .whitespacesAndNewlines) == entries[currentIndex].correctAnswer.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        viewModel.submitQuizAnswer(
+            for: topic,
+            questionId: entries[currentIndex].id,
+            userAnswer: userAnswer,
+            isCorrect: isCorrect
+        )
+        
+        hasSubmitted = true
     }
 }
 
 
 #Preview {
     QuizView(viewModel: OgniloudViewModel(), topic: "Sample Topic", quizQuestions: [
-        "Madre": "Mother",
-        "Padre": "Father",
-        "Hermano": "Brother",
-        "Hermana": "Sister",
+        "What is 'Madre' in English?": "Mother",
+        "What is 'Padre' in English?": "Father",
+        "What is 'Hermano' in English?": "Brother",
+        "What is 'Hermana' in English?": "Sister",
     ])
 }

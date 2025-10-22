@@ -51,7 +51,7 @@ struct FlashcardView: View {
             }
             .padding()
             
-            HStack(spacing: 16) {
+            HStack(spacing: Constants.betweenButtonPadding) {
                 Button(action: {
                     viewModel.setCardFaceUp(flashcards[currentIndex], in: topic, faceUp: true)
                     currentIndex = (currentIndex - 1 + flashcards.count) % flashcards.count
@@ -86,7 +86,7 @@ struct FlashcardView: View {
             }
             .padding(.horizontal)
             
-            HStack(spacing: 16) {
+            HStack(spacing: Constants.betweenButtonPadding) {
                 Button(action: {
                     viewModel.markAllFlashcards(for: topic, reviewed: true)
                 }) {
@@ -119,19 +119,36 @@ struct FlashcardView: View {
             }
             .padding(.horizontal)
             
-            Button(action: {
-                viewModel.shuffleFlashcards(for: topic)
-                currentIndex = 0
-            }) {
-                HStack {
-                    Image(systemName: "shuffle")
-                    Text("Shuffle")
+            HStack(spacing: Constants.betweenButtonPadding) {
+                Button(action: {
+                    viewModel.toggleSingleFlashcard(for: topic, flashcardId: flashcards[currentIndex].id)
+                }) {
+                    HStack {
+                        Image(systemName: "checkmark.circle.fill")
+                        Text("Toggle This Card")
+                    }
+                    .font(.subheadline)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, Constants.buttonPadding)
+                    .background(Color.green)
+                    .foregroundColor(.white)
+                    .cornerRadius(Constants.cornerRadius)
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, Constants.buttonPadding)
-                .background(Color.yellow)
-                .foregroundColor(.white)
-                .cornerRadius(Constants.cornerRadius)
+                
+                Button(action: {
+                    viewModel.shuffleFlashcards(for: topic)
+                    currentIndex = 0
+                }) {
+                    HStack {
+                        Image(systemName: "shuffle")
+                        Text("Shuffle")
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, Constants.buttonPadding)
+                    .background(Color.yellow)
+                    .foregroundColor(.white)
+                    .cornerRadius(Constants.cornerRadius)
+                }
             }
             .padding(.horizontal)
         }
@@ -146,6 +163,7 @@ struct FlashcardView: View {
     private struct Constants {
         static let buttonPadding = 12.0
         static let cornerRadius = 10.0
+        static let betweenButtonPadding = 16.0
     }
 }
 

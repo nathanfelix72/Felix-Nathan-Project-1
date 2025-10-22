@@ -92,6 +92,10 @@ class OgniloudViewModel {
         }
     }
     
+    func resetToDefaults() {
+        saveData.resetToDefaults()
+    }
+    
     func setCardFaceUp(_ flashcard: OgniloudModel.Flashcard, in topicTitle: String, faceUp: Bool) {
         model.setCardFaceUp(flashcard, in: topicTitle, faceUp: faceUp)
     }
@@ -104,8 +108,8 @@ class OgniloudViewModel {
         model.submitQuizAnswer(for: topicTitle, questionId: questionId, userAnswer: userAnswer, isCorrect: isCorrect)
     }
     
-    func resetToDefaults() {
-        saveData.resetToDefaults()
+    func toggleSingleFlashcard(for topicTitle: String, flashcardId: UUID) {
+        model.toggleSingleFlashcard(for: topicTitle, flashcardId: flashcardId)
     }
     
     func updateHighScore(for topicTitle: String, score: Int) {

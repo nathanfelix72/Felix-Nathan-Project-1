@@ -17,10 +17,18 @@ struct OgniloudModel: Codable {
     
     mutating func flipCard(_ flashcard: Flashcard, in topicTitle: String) {
         if let topicIndex = topics.firstIndex(where: { $0.title == topicTitle }),
-           let cardIndex = topics[topicIndex].flashcards.firstIndex(where: { $0.id == flashcard.id }) {
+            let cardIndex = topics[topicIndex].flashcards.firstIndex(where: { $0.id == flashcard.id }) {
             topics[topicIndex].flashcards[cardIndex].isFaceUp.toggle()
             topics[topicIndex].flashcards[cardIndex].isReviewed = true
             
+            updateFlashcardProgress(for: topicIndex)
+        }
+    }
+    
+    mutating func toggleSingleFlashcard(for topicTitle: String, flashcardId: UUID) {
+        if let topicIndex = topics.firstIndex(where: { $0.title == topicTitle }),
+           let cardIndex = topics[topicIndex].flashcards.firstIndex(where: { $0.id == flashcardId }) {
+            topics[topicIndex].flashcards[cardIndex].isReviewed.toggle()
             updateFlashcardProgress(for: topicIndex)
         }
     }

@@ -18,9 +18,18 @@ class OgniloudViewModel {
     
     // MARK: - Properties
     
-    private var model = OgniloudModel(topics: spanishTopics)
+    private var saveData = SaveData()
+    
+    private var model: OgniloudModel {
+        get { saveData.model }
+        set { saveData.model = newValue }
+    }
     
     // MARK: - Initialization
+    
+    init() {
+        
+    }
     
     // MARK: - Model Access
     
@@ -38,6 +47,10 @@ class OgniloudViewModel {
     
     func getFlashcards(for topicTitle: String) -> [OgniloudModel.Flashcard] {
         model.topics.first(where: { $0.title == topicTitle })?.flashcards ?? []
+    }
+    
+    func getHighScore(for topicTitle: String) -> Int {
+        model.topics.first(where: { $0.title == topicTitle })?.quizHighScore ?? 0
     }
     
     func getLessonContent(for topicTitle: String) -> String {
@@ -64,8 +77,8 @@ class OgniloudViewModel {
         model.markAllFlashcards(for: topicTitle, reviewed: reviewed)
     }
     
-    func markLessonComplete(for topicTitle: String) {
-        model.markLessonComplete(for: topicTitle)
+    func markLessonComplete(for topicTitle: String, completed: Bool) {
+        model.markLessonComplete(for: topicTitle, completed: completed)
     }
     
     // ChatGPT helped me figure out what was wrong with this function
@@ -87,5 +100,11 @@ class OgniloudViewModel {
         model.submitQuizAnswer(for: topicTitle, questionId: questionId, userAnswer: userAnswer, isCorrect: isCorrect)
     }
     
-    // MARK: - Private Helpers
+    func resetToDefaults() {
+        saveData.resetToDefaults()
+    }
+    
+    func updateHighScore(for topicTitle: String, score: Int) {
+        model.updateHighScore(for: topicTitle, score: score)
+    }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct OgniloudModel {
+struct OgniloudModel: Codable {
     
     // MARK: - Properties
     
@@ -34,9 +34,13 @@ struct OgniloudModel {
         }
     }
     
-    mutating func markLessonComplete(for topicTitle: String) {
+    mutating func markLessonComplete(for topicTitle: String, completed: Bool) {
         if let index = topics.firstIndex(where: { $0.title == topicTitle }) {
-            topics[index].progress["Lesson"] = "Completed"
+            if completed == true {
+                topics[index].progress["Lesson"] = "Completed"
+            } else {
+                topics[index].progress["Lesson"] = "Not Started"
+            }
         }
     }
     
@@ -78,6 +82,14 @@ struct OgniloudModel {
         }
     }
     
+    mutating func updateHighScore(for topicTitle: String, score: Int) {
+        if let topicIndex = topics.firstIndex(where: { $0.title == topicTitle }) {
+            if score > topics[topicIndex].quizHighScore {
+                topics[topicIndex].quizHighScore = score
+            }
+        }
+    }
+    
     // MARK: - Private Helpers
     
     private mutating func updateFlashcardProgress(for topicIndex: Int) {
@@ -94,29 +106,31 @@ struct OgniloudModel {
     
     // MARK: - Nested Types
     
-    enum TopicComponent: String, CaseIterable {
+    enum TopicComponent: String, CaseIterable, Codable {
         case lesson = "Lesson"
         case quiz = "Quiz"
         case flashcards = "Flashcards"
     }
     
-    struct OgniloudTopic: Identifiable {
+    struct OgniloudTopic: Identifiable, Codable {
         var id = UUID()
         var title: String
         var terms: [String: String]
         var lessonContent: String
         var quizData: [String: String]
+        var quizHighScore: Int
         var progress: [String: String]
         var flashcards: [Flashcard]
         var quizQuestions: [QuizQuestion]
         var subPages: [String]
         
-        init(title: String, terms: [String: String], lessonContent: String, quizData: [String: String], progress: [String: String], subPages: [String]) {
+        init(title: String, terms: [String: String], lessonContent: String, quizData: [String: String], quizHighScore: Int, progress: [String: String], subPages: [String]) {
             self.id = UUID()
             self.title = title
             self.terms = terms
             self.lessonContent = lessonContent
             self.quizData = quizData
+            self.quizHighScore = quizHighScore
             self.progress = progress
             self.subPages = subPages
             
@@ -131,20 +145,20 @@ struct OgniloudModel {
         }
     }
     
-    struct Flashcard: Identifiable {
-        fileprivate(set) var id = UUID()
-        fileprivate(set) var term: String
-        fileprivate(set) var definition: String
-        fileprivate(set) var isFaceUp = false
-        fileprivate(set) var isReviewed = false
+    struct Flashcard: Identifiable, Codable {
+        var id = UUID()
+        var term: String
+        var definition: String
+        var isFaceUp = false
+        var isReviewed = false
     }
     
-    struct QuizQuestion: Identifiable {
-        fileprivate(set) var id = UUID()
-        fileprivate(set) var question: String
-        fileprivate(set) var correctAnswer: String
-        fileprivate(set) var userAnswer: String? = nil
-        fileprivate(set) var hasSubmitted: Bool = false
-        fileprivate(set) var answeredCorrectly = false
+    struct QuizQuestion: Identifiable, Codable {
+        var id = UUID()
+        var question: String
+        var correctAnswer: String
+        var userAnswer: String? = nil
+        var hasSubmitted: Bool = false
+        var answeredCorrectly = false
     }
 }

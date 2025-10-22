@@ -26,15 +26,14 @@ struct LessonView: View {
                     .padding()
                 
                 Button(action: {
-                    viewModel.markLessonComplete(for: topic)
-                    isCompleted = true
+                    viewModel.markLessonComplete(for: topic, completed: !isCompleted)
+                    isCompleted.toggle()
                 }) {
                     HStack {
                         Image(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
                         Text(isCompleted ? "Lesson Completed" : "Mark Lesson Complete")
                     }
                 }
-                .disabled(isCompleted)
             }
         }
         .onAppear {

@@ -11,7 +11,7 @@ struct QuizView: View {
     
     // MARK: - Properties
     
-    @Bindable var viewModel: OgniloudViewModel
+    var viewModel: OgniloudViewModel
     
     let topic: String
     let quizQuestions: [String: String]
@@ -26,45 +26,94 @@ struct QuizView: View {
     var body: some View {
         VStack {
             if !entries.isEmpty && entries.indices.contains(currentIndex) {
-                QuizQuestion(
-                    quizQuestion: entries[currentIndex],
-                    userAnswer: $userAnswer,
-                    hasSubmitted: $hasSubmitted,
-                    onSubmit: submitAnswer
-                )
-                .id(entries[currentIndex].id)
+                if currentIndex < (entries.count) {
+                    QuizQuestion(
+                        quizQuestion: entries[currentIndex],
+                        userAnswer: $userAnswer,
+                        hasSubmitted: $hasSubmitted,
+                        onSubmit: submitAnswer
+                    )
+                    .id(entries[currentIndex].id)
+                }
                 
                 HStack {
-                    Button("Previous") {
-                        currentIndex -= 1
-                        loadCurrentQuestion()
-                    }
-                    .disabled(currentIndex == 0)
-                    
-                    Spacer()
-                    
                     Button("Next") {
-                        currentIndex += 1
-                        loadCurrentQuestion()
+                        if currentIndex < (entries.count) {
+                            currentIndex += 1
+                            loadCurrentQuestion()
+                        }
                     }
-                    .disabled(currentIndex >= (entries.count - 1))
+                    .disabled(currentIndex >= (entries.count) || !hasSubmitted)
                 }
                 .padding()
+                
+                Text("Question \(currentIndex + 1)/\(entries.count)")
             } else {
-                Text("Loading quiz...")
-                    .padding()
+                let currentScore = entries.filter { $0.answeredCorrectly }.count
+                
+                List {
+                    Section(header: Text("Quiz Complete!")) {
+                        Text("You have completed the quiz on \(topic).")
+                        
+                        Text("Score: \(currentScore)/\(entries.count) - High Score: \(viewModel.getHighScore(for: topic))")
+                            .font(.headline)
+                            .padding()
+                            .background(Color(.systemGray6))
+                            .cornerRadius(8)
+                        
+                        ForEach(entries) { entry in
+                            HStack {
+                                Text(entry.question)
+                                Spacer()
+                                if let userAns = entry.userAnswer {
+                                    if entry.answeredCorrectly {
+                                        Image(systemName: "checkmark.circle.fill")
+                                            .foregroundColor(.green)
+                                        Text("Your Answer: \(userAns)")
+                                            .foregroundColor(.green)
+                                    } else {
+                                        Image(systemName: "xmark.circle.fill")
+                                            .foregroundColor(.red)
+                                        Text("Your Answer: \(userAns)")
+                                            .foregroundColor(.red)
+                                        Text("Correct Answer: \(entry.correctAnswer)")
+                                            .foregroundColor(.blue)
+                                    }
+                                } else {
+                                    Text("No Answer Submitted")
+                                        .foregroundColor(.gray)
+                                }
+                            }
+                        }
+                    }
+                    
+                    Button("Reset Quiz") {
+                        resetQuiz()
+                    }
+                }
+                .onAppear {
+                    let score = entries.filter { $0.answeredCorrectly }.count
+                    viewModel.updateHighScore(for: topic, score: score)
+                }
             }
         }
         .padding()
         .onAppear {
+            resetQuiz()
             entries = viewModel.getQuizQuestions(for: topic)
             currentIndex = 0
-            
             loadCurrentQuestion()
         }
     }
     
     // MARK: - Helpers
+    
+    private func resetQuiz() {
+        viewModel.resetProgress(for: topic, component: "Quiz")
+        entries = viewModel.getQuizQuestions(for: topic)
+        currentIndex = 0
+        loadCurrentQuestion()
+    }
     
     private func loadCurrentQuestion() {
         guard entries.indices.contains(currentIndex) else {

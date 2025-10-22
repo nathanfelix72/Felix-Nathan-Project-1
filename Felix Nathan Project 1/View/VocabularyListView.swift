@@ -39,8 +39,24 @@ struct VocabularyListView: View {
 }
 
 #Preview {
-    VocabularyListView(topic: "Sample Topic", terms: [
-        "Madre": "Mother",
-        "Padre": "Father",
-    ])
+    VocabularyListView(
+        topic: "Food",
+        terms: [
+            "Manzana": "Apple",
+            "Pan": "Bread",
+            "Queso": "Cheese",
+            "Carne": "Meat",
+            "Pollo": "Chicken",
+            "Agua": "Water",
+            "Leche": "Milk",
+            "Pescado": "Fish",
+            "Fruta": "Fruit",
+            "Verdura": "Vegetable",
+            "Cebolla": "Onion",
+            "Tomate": "Tomato",
+            "Arroz": "Rice",
+            "Sopa": "Soup",
+            "Huevos": "Eggs"
+        ]
+    )
 }

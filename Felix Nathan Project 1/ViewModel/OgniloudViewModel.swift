@@ -18,7 +18,7 @@ class OgniloudViewModel {
     
     // MARK: - Properties
     
-    private var model = OgniloudModel(topics: spanishTopics, flashcards: [], quizQuestions: [])
+    private var model = OgniloudModel(topics: spanishTopics)
     
     // MARK: - Initialization
     
@@ -30,54 +30,42 @@ class OgniloudViewModel {
     
     // MARK: - User Intents
     
-    func getFlashcards(for topicTitle: String) -> [OgniloudModel.Flashcard] {
-        model.topics.first(where: { $0.title == topicTitle })?.flashcards ?? []
-    }
-    
-    func getQuizQuestions(for topicTitle: String) -> [OgniloudModel.QuizQuestion] {
-        model.topics.first(where: { $0.title == topicTitle })?.quizQuestions ?? []
-    }
-    
-    func initializeFlashcards(for topicTitle: String, count: Int) {
-        model.initializeFlashcards(for: topicTitle, count: count)
-    }
-    
-    func initializeQuizQuestions(for topicTitle: String, count: Int) {
-        model.initializeQuizQuestions(for: topicTitle)
-    }
-
     func flipCard(_ flashcard: OgniloudModel.Flashcard, in topicTitle: String) {
         withAnimation(.easeIn(duration: Constants.animationDuration)) {
             model.flipCard(flashcard, in: topicTitle)
         }
     }
     
-    func markLessonComplete(for topicTitle: String) {
-        model.markLessonComplete(for: topicTitle)
-    }
-    
-    func getProgress(for topicTitle: String) -> [String: String] {
-        model.topics.first(where: { $0.title == topicTitle })?.progress ?? [:]
-    }
-    
-    func getTerms(for topicTitle: String) -> [String: String] {
-        model.topics.first(where: { $0.title == topicTitle })?.terms ?? [:]
+    func getFlashcards(for topicTitle: String) -> [OgniloudModel.Flashcard] {
+        model.topics.first(where: { $0.title == topicTitle })?.flashcards ?? []
     }
     
     func getLessonContent(for topicTitle: String) -> String {
         model.topics.first(where: { $0.title == topicTitle })?.lessonContent ?? "No lesson content available."
     }
     
+    func getProgress(for topicTitle: String) -> [String: String] {
+        model.topics.first(where: { $0.title == topicTitle })?.progress ?? [:]
+    }
+    
     func getQuizData(for topicTitle: String) -> [String: String] {
         model.topics.first(where: { $0.title == topicTitle })?.quizData ?? [:]
     }
     
-    func submitQuizAnswer(for topicTitle: String, questionId: UUID, userAnswer: String, isCorrect: Bool) {
-        model.submitQuizAnswer(for: topicTitle, questionId: questionId, userAnswer: userAnswer, isCorrect: isCorrect)
+    func getQuizQuestions(for topicTitle: String) -> [OgniloudModel.QuizQuestion] {
+        model.topics.first(where: { $0.title == topicTitle })?.quizQuestions ?? []
     }
     
-    func shuffleFlashcards(for topicTitle: String) {
-        model.shuffleFlashcards(for: topicTitle)
+    func getTerms(for topicTitle: String) -> [String: String] {
+        model.topics.first(where: { $0.title == topicTitle })?.terms ?? [:]
+    }
+    
+    func markAllFlashcards(for topicTitle: String, reviewed: Bool) {
+        model.markAllFlashcards(for: topicTitle, reviewed: reviewed)
+    }
+    
+    func markLessonComplete(for topicTitle: String) {
+        model.markLessonComplete(for: topicTitle)
     }
     
     // ChatGPT helped me figure out what was wrong with this function
@@ -86,9 +74,17 @@ class OgniloudViewModel {
             return
         }
         
-        if let componentEnum = OgniloudModel.LearningComponent(rawValue: component) {
+        if let componentEnum = OgniloudModel.TopicComponent(rawValue: component) {
             model.resetProgress(for: topicIndex, component: componentEnum)
         }
+    }
+    
+    func shuffleFlashcards(for topicTitle: String) {
+        model.shuffleFlashcards(for: topicTitle)
+    }
+    
+    func submitQuizAnswer(for topicTitle: String, questionId: UUID, userAnswer: String, isCorrect: Bool) {
+        model.submitQuizAnswer(for: topicTitle, questionId: questionId, userAnswer: userAnswer, isCorrect: isCorrect)
     }
     
     // MARK: - Private Helpers

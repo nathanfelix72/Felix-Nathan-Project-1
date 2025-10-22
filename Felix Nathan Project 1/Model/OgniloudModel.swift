@@ -12,8 +12,6 @@ struct OgniloudModel {
     // MARK: - Properties
     
     private(set) var topics: [OgniloudTopic]
-    private(set) var flashcards: Array<Flashcard>
-    private(set) var quizQuestions: Array<QuizQuestion>
     
     // MARK: - User Intents
     
@@ -21,32 +19,18 @@ struct OgniloudModel {
         if let topicIndex = topics.firstIndex(where: { $0.title == topicTitle }),
            let cardIndex = topics[topicIndex].flashcards.firstIndex(where: { $0.id == flashcard.id }) {
             topics[topicIndex].flashcards[cardIndex].isFaceUp.toggle()
-            topics[topicIndex].flashcards[cardIndex].hasReviewed = true
+            topics[topicIndex].flashcards[cardIndex].isReviewed = true
             
             updateFlashcardProgress(for: topicIndex)
         }
     }
     
-    mutating func initializeFlashcards(for topicTitle: String, count: Int) {
+    mutating func markAllFlashcards(for topicTitle: String, reviewed: Bool) {
         if let index = topics.firstIndex(where: { $0.title == topicTitle }) {
-            if topics[index].flashcards.isEmpty {
-                topics[index].flashcards = (0..<count).map { _ in
-                    Flashcard(isFaceUp: true)
-                }.shuffled()
-                topics[index].progress["Flashcards"] = "0/\(count) reviewed"
+            for i in topics[index].flashcards.indices {
+                topics[index].flashcards[i].isReviewed = reviewed
             }
-        }
-    }
-    
-    mutating func initializeQuizQuestions(for topicTitle: String) {
-        if let index = topics.firstIndex(where: { $0.title == topicTitle }) {
-            if topics[index].quizQuestions.isEmpty {
-                let quizData = topics[index].quizData.shuffled()
-                topics[index].quizQuestions = quizData.map { (question, answer) in
-                    QuizQuestion(question: question, correctAnswer: answer, answeredCorrectly: false)
-                }
-                topics[index].progress["Quiz"] = "0/\(quizData.count) correct"
-            }
+            updateFlashcardProgress(for: index)
         }
     }
     
@@ -56,17 +40,7 @@ struct OgniloudModel {
         }
     }
     
-    mutating func submitQuizAnswer(for topicTitle: String, questionId: UUID, userAnswer: String, isCorrect: Bool) {
-        if let topicIndex = topics.firstIndex(where: { $0.title == topicTitle }),
-           let questionIndex = topics[topicIndex].quizQuestions.firstIndex(where: { $0.id == questionId }) {
-            topics[topicIndex].quizQuestions[questionIndex].userAnswer = userAnswer
-            topics[topicIndex].quizQuestions[questionIndex].answeredCorrectly = isCorrect
-            
-            updateQuizProgress(for: topicIndex)
-        }
-    }
-    
-    mutating func resetProgress(for topicIndex: Int, component: LearningComponent) {
+    mutating func resetProgress(for topicIndex: Int, component: TopicComponent) {
         switch component {
         case .lesson:
             topics[topicIndex].progress["Lesson"] = "Not Started"
@@ -81,10 +55,20 @@ struct OgniloudModel {
             
         case .flashcards:
             for i in topics[topicIndex].flashcards.indices {
-                topics[topicIndex].flashcards[i].hasReviewed = false
+                topics[topicIndex].flashcards[i].isReviewed = false
                 topics[topicIndex].flashcards[i].isFaceUp = true
             }
             topics[topicIndex].progress["Flashcards"] = "0/\(topics[topicIndex].flashcards.count) reviewed"
+        }
+    }
+    
+    mutating func submitQuizAnswer(for topicTitle: String, questionId: UUID, userAnswer: String, isCorrect: Bool) {
+        if let topicIndex = topics.firstIndex(where: { $0.title == topicTitle }),
+           let questionIndex = topics[topicIndex].quizQuestions.firstIndex(where: { $0.id == questionId }) {
+            topics[topicIndex].quizQuestions[questionIndex].userAnswer = userAnswer
+            topics[topicIndex].quizQuestions[questionIndex].answeredCorrectly = isCorrect
+            
+            updateQuizProgress(for: topicIndex)
         }
     }
     
@@ -96,21 +80,21 @@ struct OgniloudModel {
     
     // MARK: - Private Helpers
     
+    private mutating func updateFlashcardProgress(for topicIndex: Int) {
+        let reviewedCount = topics[topicIndex].flashcards.filter { $0.isReviewed }.count
+        let totalCount = topics[topicIndex].flashcards.count
+        topics[topicIndex].progress["Flashcards"] = "\(reviewedCount)/\(totalCount) reviewed"
+    }
+    
     private mutating func updateQuizProgress(for topicIndex: Int) {
         let correctCount = topics[topicIndex].quizQuestions.filter { $0.answeredCorrectly }.count
         let totalCount = topics[topicIndex].quizQuestions.count
         topics[topicIndex].progress["Quiz"] = "\(correctCount)/\(totalCount) correct"
     }
     
-    private mutating func updateFlashcardProgress(for topicIndex: Int) {
-        let reviewedCount = topics[topicIndex].flashcards.filter { $0.hasReviewed }.count
-        let totalCount = topics[topicIndex].flashcards.count
-        topics[topicIndex].progress["Flashcards"] = "\(reviewedCount)/\(totalCount) reviewed"
-    }
-    
     // MARK: - Nested Types
     
-    enum LearningComponent: String, CaseIterable {
+    enum TopicComponent: String, CaseIterable {
         case lesson = "Lesson"
         case quiz = "Quiz"
         case flashcards = "Flashcards"
@@ -123,24 +107,39 @@ struct OgniloudModel {
         var lessonContent: String
         var quizData: [String: String]
         var progress: [String: String]
-        var flashcards: [Flashcard] = []
-        var quizQuestions: [QuizQuestion] = []
+        var flashcards: [Flashcard]
+        var quizQuestions: [QuizQuestion]
         var subPages: [String]
+        
+        init(title: String, terms: [String: String], lessonContent: String, quizData: [String: String], progress: [String: String], subPages: [String]) {
+            self.id = UUID()
+            self.title = title
+            self.terms = terms
+            self.lessonContent = lessonContent
+            self.quizData = quizData
+            self.progress = progress
+            self.subPages = subPages
+            
+            let termEntries = terms.map { (term: $0.key, definition: $0.value) }
+            self.flashcards = termEntries.map { entry in
+                Flashcard(term: entry.term, definition: entry.definition, isFaceUp: true)
+            }.shuffled()
+            
+            self.quizQuestions = quizData.shuffled().map { (question, answer) in
+                QuizQuestion(question: question, correctAnswer: answer, answeredCorrectly: false)
+            }
+        }
     }
     
     struct Flashcard: Identifiable {
-        
-        // MARK: - Properties
-        
         fileprivate(set) var id = UUID()
+        fileprivate(set) var term: String
+        fileprivate(set) var definition: String
         fileprivate(set) var isFaceUp = false
-        fileprivate(set) var hasReviewed = false
+        fileprivate(set) var isReviewed = false
     }
     
     struct QuizQuestion: Identifiable {
-        
-        // MARK: - Properties
-        
         fileprivate(set) var id = UUID()
         fileprivate(set) var question: String
         fileprivate(set) var correctAnswer: String

@@ -57,8 +57,6 @@ struct QuizView: View {
         }
         .padding()
         .onAppear {
-            viewModel.initializeQuizQuestions(for: topic, count: quizQuestions.count)
-            
             entries = viewModel.getQuizQuestions(for: topic)
             currentIndex = 0
             
@@ -90,12 +88,14 @@ struct QuizView: View {
         )
         
         hasSubmitted = true
+        
+        entries = viewModel.getQuizQuestions(for: topic)
     }
 }
 
 
 #Preview {
-    QuizView(viewModel: OgniloudViewModel(), topic: "Sample Topic", quizQuestions: [
+    QuizView(viewModel: OgniloudViewModel(), topic: "Relationships", quizQuestions: [
         "What is 'Madre' in English?": "Mother",
         "What is 'Padre' in English?": "Father",
         "What is 'Hermano' in English?": "Brother",

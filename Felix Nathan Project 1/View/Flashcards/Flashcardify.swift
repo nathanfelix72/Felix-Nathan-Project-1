@@ -23,7 +23,7 @@ struct Flashcardify: Animatable, ViewModifier {
     var rotation: Double
     var term1: String
     var term2: String
-    var hasReviewed: Bool
+    var isReviewed: Bool
     
     // MARK: - Computed Properties
     
@@ -36,11 +36,11 @@ struct Flashcardify: Animatable, ViewModifier {
     
     // MARK: - Initialization
 
-    init(isFaceUp: Bool, hasReviewed: Bool, term1: String, term2: String) {
+    init(isFaceUp: Bool, isReviewed: Bool, term1: String, term2: String) {
         rotation = isFaceUp ? 0 : 180
         self.term1 = term1
         self.term2 = term2
-        self.hasReviewed = hasReviewed
+        self.isReviewed = isReviewed
     }
 
     // MARK: - Body
@@ -58,7 +58,7 @@ struct Flashcardify: Animatable, ViewModifier {
                         Text(term1)
                             .font(.largeTitle)
                             .bold()
-                        if hasReviewed {
+                        if isReviewed {
                             HStack(spacing: Constants.iconSpacing) {
                                 Image(systemName: "checkmark.circle.fill")
                                     .foregroundColor(.green)
@@ -83,7 +83,7 @@ struct Flashcardify: Animatable, ViewModifier {
 }
 
 extension View {
-    func flashcardify(isFaceUp: Bool, hasReviewed: Bool, term1: String, term2: String) -> some View {
-        modifier(Flashcardify(isFaceUp: isFaceUp, hasReviewed: hasReviewed, term1: term1, term2: term2))
+    func flashcardify(isFaceUp: Bool, isReviewed: Bool, term1: String, term2: String) -> some View {
+        modifier(Flashcardify(isFaceUp: isFaceUp, isReviewed: isReviewed, term1: term1, term2: term2))
     }
 }

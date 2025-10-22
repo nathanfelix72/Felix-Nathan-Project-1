@@ -45,7 +45,7 @@ struct TopicsView: View {
     }
 }
 
-// I had chatGPT generate this for me
+// I had chatGPT help generate this for me
 struct TopicPageView: View {
     let page: String
     let topic: String

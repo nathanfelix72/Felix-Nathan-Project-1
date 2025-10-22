@@ -32,7 +32,7 @@ struct FlashcardView: View {
             if currentIndex < flashcards.count {
                 Flashcard(
                     flashcard: flashcards[currentIndex],
-                    terms: [entries[currentIndex].term, entries[currentIndex].definition]
+                    terms: [flashcards[currentIndex].term, flashcards[currentIndex].definition]
                 )
                 .frame(width: 250, height: 350)
                 .animation(.easeInOut, value: currentIndex)
@@ -41,24 +41,38 @@ struct FlashcardView: View {
                 }
             }
             
+            Text("Flashcard \(currentIndex + 1)/\(flashcards.count)")
+            
+            Text("Number Reviewed: \(flashcards.filter { $0.isReviewed }.count)")
+            
             HStack {
                 Button("Previous") {
-                    currentIndex = (currentIndex - 1 + entries.count) % entries.count
+                    currentIndex = (currentIndex - 1 + flashcards.count) % flashcards.count
                 }
                 .disabled(currentIndex == 0)
 
                 Spacer()
 
                 Button("Next") {
-                    currentIndex = (currentIndex + 1) % entries.count
+                    currentIndex = (currentIndex + 1) % flashcards.count
                 }
-                .disabled(currentIndex == entries.count - 1)
+                .disabled(currentIndex == flashcards.count - 1)
             }
             .padding()
+            
+            Button("Mark all as reviewed") {
+                viewModel.markAllFlashcards(for: topic, reviewed: true)
+            }
+            Button("Mark all as unreviewed") {
+                viewModel.markAllFlashcards(for: topic, reviewed: false)
+            }
+            Button("Shuffle Flashcards") {
+                viewModel.shuffleFlashcards(for: topic)
+                currentIndex = 0
+            }
         }
         .padding()
         .onAppear {
-            viewModel.initializeFlashcards(for: topic, count: entries.count)
             viewModel.shuffleFlashcards(for: topic)
         }
     }
@@ -66,7 +80,7 @@ struct FlashcardView: View {
 
 
 #Preview {
-    FlashcardView(viewModel: OgniloudViewModel(), topic: "Sample Topic", terms: [
+    FlashcardView(viewModel: OgniloudViewModel(), topic: "Relationships", terms: [
         "Madre": "Mother",
         "Padre": "Father",
         "Hermano": "Brother",

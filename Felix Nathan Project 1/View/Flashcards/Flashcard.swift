@@ -20,12 +20,15 @@ struct Flashcard: View {
         VStack {
             Color.clear
         }
-        .flashcardify(isFaceUp: flashcard.isFaceUp, hasReviewed: flashcard.hasReviewed, term1: terms[0], term2: terms[1])
+        .flashcardify(isFaceUp: flashcard.isFaceUp, isReviewed: flashcard.isReviewed, term1: terms[0], term2: terms[1])
         .aspectRatio(3.0 / 4.0, contentMode: .fit)
     }
 }
 
 #Preview {
-    Flashcard(flashcard: OgniloudModel.Flashcard(isFaceUp: true), terms: ["Madre", "Mother"])
-        .padding()
+    Flashcard(
+        flashcard: OgniloudModel.Flashcard(term: "Madre", definition: "Mother", isFaceUp: true),
+        terms: ["Madre", "Mother"]
+    )
+    .padding()
 }

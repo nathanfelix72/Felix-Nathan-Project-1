@@ -39,7 +39,6 @@ struct ProgressView: View {
             }
             .padding(.vertical, 8)
         }
-        .navigationTitle("\(topic) Vocabulary")
     }
 }
 

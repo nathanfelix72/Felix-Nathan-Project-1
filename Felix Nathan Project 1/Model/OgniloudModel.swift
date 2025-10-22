@@ -55,7 +55,8 @@ struct OgniloudModel: Codable {
                 topics[topicIndex].quizQuestions[i].hasSubmitted = false
                 topics[topicIndex].quizQuestions[i].answeredCorrectly = false
             }
-            topics[topicIndex].progress["Quiz"] = "0/\(topics[topicIndex].quizQuestions.count) correct"
+            topics[topicIndex].quizHighScore = 0
+            topics[topicIndex].progress["Quiz"] = "Not Taken"
             
         case .flashcards:
             for i in topics[topicIndex].flashcards.indices {
@@ -66,13 +67,18 @@ struct OgniloudModel: Codable {
         }
     }
     
+    mutating func setCardFaceUp(_ flashcard: Flashcard, in topicTitle: String, faceUp: Bool) {
+        if let topicIndex = topics.firstIndex(where: { $0.title == topicTitle }),
+           let cardIndex = topics[topicIndex].flashcards.firstIndex(where: { $0.id == flashcard.id }) {
+            topics[topicIndex].flashcards[cardIndex].isFaceUp = faceUp
+        }
+    }
+    
     mutating func submitQuizAnswer(for topicTitle: String, questionId: UUID, userAnswer: String, isCorrect: Bool) {
         if let topicIndex = topics.firstIndex(where: { $0.title == topicTitle }),
            let questionIndex = topics[topicIndex].quizQuestions.firstIndex(where: { $0.id == questionId }) {
             topics[topicIndex].quizQuestions[questionIndex].userAnswer = userAnswer
             topics[topicIndex].quizQuestions[questionIndex].answeredCorrectly = isCorrect
-            
-            updateQuizProgress(for: topicIndex)
         }
     }
     
@@ -86,6 +92,7 @@ struct OgniloudModel: Codable {
         if let topicIndex = topics.firstIndex(where: { $0.title == topicTitle }) {
             if score > topics[topicIndex].quizHighScore {
                 topics[topicIndex].quizHighScore = score
+                updateQuizProgress(for: topicIndex, highScore: score)
             }
         }
     }
@@ -98,10 +105,12 @@ struct OgniloudModel: Codable {
         topics[topicIndex].progress["Flashcards"] = "\(reviewedCount)/\(totalCount) reviewed"
     }
     
-    private mutating func updateQuizProgress(for topicIndex: Int) {
-        let correctCount = topics[topicIndex].quizQuestions.filter { $0.answeredCorrectly }.count
-        let totalCount = topics[topicIndex].quizQuestions.count
-        topics[topicIndex].progress["Quiz"] = "\(correctCount)/\(totalCount) correct"
+    private mutating func updateQuizProgress(for topicIndex: Int, highScore: Int) {
+        if highScore > 0 {
+            topics[topicIndex].progress["Quiz"] = "High Score: \(highScore)/\(topics[topicIndex].quizQuestions.count)"
+        } else {
+            topics[topicIndex].progress["Quiz"] = "Not Taken"
+        }
     }
     
     // MARK: - Nested Types

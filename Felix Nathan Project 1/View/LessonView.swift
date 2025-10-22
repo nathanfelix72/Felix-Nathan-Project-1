@@ -22,7 +22,7 @@ struct LessonView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                Text(lessonContent)
+                Text(.init(lessonContent))
                     .padding()
                 
                 Button(action: {
@@ -34,6 +34,7 @@ struct LessonView: View {
                         Text(isCompleted ? "Lesson Completed" : "Mark Lesson Complete")
                     }
                 }
+                .padding()
             }
         }
         .onAppear {

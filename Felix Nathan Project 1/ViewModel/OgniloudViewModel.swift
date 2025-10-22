@@ -92,6 +92,10 @@ class OgniloudViewModel {
         }
     }
     
+    func setCardFaceUp(_ flashcard: OgniloudModel.Flashcard, in topicTitle: String, faceUp: Bool) {
+        model.setCardFaceUp(flashcard, in: topicTitle, faceUp: faceUp)
+    }
+    
     func shuffleFlashcards(for topicTitle: String) {
         model.shuffleFlashcards(for: topicTitle)
     }

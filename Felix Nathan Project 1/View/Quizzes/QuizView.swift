@@ -20,6 +20,7 @@ struct QuizView: View {
     @State private var userAnswer = ""
     @State private var hasSubmitted = false
     @State private var entries: [OgniloudModel.QuizQuestion] = []
+    @State private var quizCompleted = false
     
     // MARK: - Body
     
@@ -37,11 +38,24 @@ struct QuizView: View {
                 }
                 
                 HStack {
-                    Button("Next") {
-                        if currentIndex < (entries.count) {
+                    Button(action: {
+                        if currentIndex < (entries.count - 1) {
                             currentIndex += 1
                             loadCurrentQuestion()
+                        } else {
+                            quizCompleted = true
+                            currentIndex += 1
                         }
+                    }) {
+                        HStack {
+                            Text("Next")
+                            Image(systemName: "chevron.right")
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, Constants.buttonPadding)
+                        .background(!hasSubmitted ? Color.gray.opacity(0.3) : Color.blue)
+                        .foregroundColor(!hasSubmitted ? .gray : .white)
+                        .cornerRadius(Constants.cornerRadius)
                     }
                     .disabled(currentIndex >= (entries.count) || !hasSubmitted)
                 }
@@ -62,47 +76,62 @@ struct QuizView: View {
                             .cornerRadius(8)
                         
                         ForEach(entries) { entry in
-                            HStack {
+                            VStack(alignment: .leading, spacing: 8) {
                                 Text(entry.question)
-                                Spacer()
+                                    .font(.subheadline)
+                                
                                 if let userAns = entry.userAnswer {
                                     if entry.answeredCorrectly {
-                                        Image(systemName: "checkmark.circle.fill")
-                                            .foregroundColor(.green)
-                                        Text("Your Answer: \(userAns)")
-                                            .foregroundColor(.green)
+                                        HStack {
+                                            Image(systemName: "checkmark.circle.fill")
+                                                .foregroundColor(.green)
+                                            Text("Your Answer: \(userAns)")
+                                                .foregroundColor(.green)
+                                        }
                                     } else {
-                                        Image(systemName: "xmark.circle.fill")
-                                            .foregroundColor(.red)
-                                        Text("Your Answer: \(userAns)")
-                                            .foregroundColor(.red)
-                                        Text("Correct Answer: \(entry.correctAnswer)")
-                                            .foregroundColor(.blue)
+                                        HStack {
+                                            Image(systemName: "xmark.circle.fill")
+                                                .foregroundColor(.red)
+                                            VStack(alignment: .leading) {
+                                                Text("Your Answer: \(userAns)")
+                                                    .foregroundColor(.red)
+                                                Text("Correct Answer: \(entry.correctAnswer)")
+                                                    .foregroundColor(.blue)
+                                            }
+                                        }
                                     }
                                 } else {
                                     Text("No Answer Submitted")
                                         .foregroundColor(.gray)
                                 }
                             }
+                            .padding(.vertical, 4)
                         }
                     }
                     
-                    Button("Reset Quiz") {
+                    Button("Retake Quiz") {
                         resetQuiz()
                     }
                 }
                 .onAppear {
-                    let score = entries.filter { $0.answeredCorrectly }.count
-                    viewModel.updateHighScore(for: topic, score: score)
+                    if quizCompleted {
+                        let score = entries.filter { $0.answeredCorrectly }.count
+                        viewModel.updateHighScore(for: topic, score: score)
+                    }
                 }
             }
         }
         .padding()
         .onAppear {
-            resetQuiz()
             entries = viewModel.getQuizQuestions(for: topic)
             currentIndex = 0
+            quizCompleted = false
             loadCurrentQuestion()
+        }
+        .onDisappear {
+            if !quizCompleted && currentIndex < entries.count {
+                viewModel.resetProgress(for: topic, component: "Quiz")
+            }
         }
     }
     
@@ -112,6 +141,7 @@ struct QuizView: View {
         viewModel.resetProgress(for: topic, component: "Quiz")
         entries = viewModel.getQuizQuestions(for: topic)
         currentIndex = 0
+        quizCompleted = false
         loadCurrentQuestion()
     }
     
@@ -140,14 +170,16 @@ struct QuizView: View {
         
         entries = viewModel.getQuizQuestions(for: topic)
     }
+    
+    // MARK: - Constants
+    
+    private struct Constants {
+        static let buttonPadding = 12.0
+        static let cornerRadius = 10.0
+    }
 }
 
 
 #Preview {
-    QuizView(viewModel: OgniloudViewModel(), topic: "Relationships", quizQuestions: [
-        "What is 'Madre' in English?": "Mother",
-        "What is 'Padre' in English?": "Father",
-        "What is 'Hermano' in English?": "Brother",
-        "What is 'Hermana' in English?": "Sister",
-    ])
+    QuizView(viewModel: OgniloudViewModel(), topic: "Relationships", quizQuestions: [:])
 }

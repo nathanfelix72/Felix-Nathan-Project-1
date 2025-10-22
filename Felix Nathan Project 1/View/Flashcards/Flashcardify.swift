@@ -16,6 +16,8 @@ struct Flashcardify: Animatable, ViewModifier {
         static let strokeWidth = 2.0
         static let iconSpacing = 6.0
         static let spacing = 8.0
+        static let starSize = 24.0
+        static let starPadding = 12.0
     }
     
     // MARK: - Properties
@@ -51,30 +53,37 @@ struct Flashcardify: Animatable, ViewModifier {
                 RoundedRectangle(cornerRadius: Constants.cornerRadius)
                     .fill(Color.white)
                 RoundedRectangle(cornerRadius: Constants.cornerRadius)
-                    .stroke(Color.black, lineWidth: Constants.strokeWidth)
+                    .stroke(isReviewed ? Color.green : Color.black, lineWidth: Constants.strokeWidth)
+                    .shadow(color: isReviewed ? Color.green.opacity(0.6) : Color.clear, radius: 8, x: 0, y: 0)
                 
                 if isFaceUp {
                     VStack(spacing: Constants.spacing) {
                         Text(term1)
                             .font(.largeTitle)
                             .bold()
-                        if isReviewed {
-                            HStack(spacing: Constants.iconSpacing) {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .foregroundColor(.green)
-                                Text("Reviewed")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                        }
                     }
                     .padding()
                 } else {
-                    Text(term2)
-                        .font(.largeTitle)
-                        .bold()
-                        .rotation3DEffect(Angle(degrees: 180), axis: (x: 0, y: 1, z: 0))
-                        .padding()
+                    VStack(spacing: Constants.spacing) {
+                        Text(term2)
+                            .font(.largeTitle)
+                            .bold()
+                            .rotation3DEffect(Angle(degrees: 180), axis: (x: 0, y: 1, z: 0))
+                    }
+                    .padding()
+                }
+                
+                if isReviewed {
+                    VStack {
+                        HStack {
+                            Spacer()
+                            Image(systemName: "star.fill")
+                                .font(.system(size: Constants.starSize))
+                                .foregroundColor(.yellow)
+                                .padding(Constants.starPadding)
+                        }
+                        Spacer()
+                    }
                 }
             }
         }

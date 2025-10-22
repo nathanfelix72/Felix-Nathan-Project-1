@@ -34,7 +34,6 @@ struct VocabularyListView: View {
             }
             .padding(.vertical, 8)
         }
-        .navigationTitle("\(topic) Vocabulary")
     }
 }
 

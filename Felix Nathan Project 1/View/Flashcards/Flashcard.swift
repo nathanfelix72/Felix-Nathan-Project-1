@@ -21,7 +21,13 @@ struct Flashcard: View {
             Color.clear
         }
         .flashcardify(isFaceUp: flashcard.isFaceUp, isReviewed: flashcard.isReviewed, term1: terms[0], term2: terms[1])
-        .aspectRatio(3.0 / 4.0, contentMode: .fit)
+        .aspectRatio(Constants.aspectRatio, contentMode: .fit)
+    }
+    
+    // MARK: - Constants
+    
+    private struct Constants {
+        static let aspectRatio: CGFloat = 3.0 / 4.0
     }
 }
 

@@ -43,8 +43,8 @@ let spanishTopics = [
         ],
         quizHighScore: 0,
         progress: [
-            "Lesson": "Not Started",
-            "Quiz": "Not Started",
+            "Lesson": "Not completed",
+            "Quiz": "Not taken",
             "Flashcards": "0/10 reviewed"
         ],
         subPages: ["View Vocabulary List", "Practice Flashcards", "Lesson", "Quiz", "View Progress"]
@@ -87,8 +87,8 @@ let spanishTopics = [
         ],
         quizHighScore: 0,
         progress: [
-            "Lesson": "Not Started",
-            "Quiz": "Not Started",
+            "Lesson": "Not completed",
+            "Quiz": "Not taken",
             "Flashcards": "0/10 reviewed"
         ],
         subPages: ["View Vocabulary List", "Practice Flashcards", "Lesson", "Quiz", "View Progress"]
@@ -127,8 +127,8 @@ let spanishTopics = [
         ],
         quizHighScore: 0,
         progress: [
-            "Lesson": "Not Started",
-            "Quiz": "Not Started",
+            "Lesson": "Not completed",
+            "Quiz": "Not taken",
             "Flashcards": "0/10 reviewed"
         ],
         subPages: ["View Vocabulary List", "Practice Flashcards", "Lesson", "Quiz", "View Progress"]
@@ -169,8 +169,8 @@ let spanishTopics = [
         ],
         quizHighScore: 0,
         progress: [
-            "Lesson": "Not Started",
-            "Quiz": "Not Started",
+            "Lesson": "Not completed",
+            "Quiz": "Not taken",
             "Flashcards": "0/10 reviewed"
         ],
         subPages: ["View Vocabulary List", "Practice Flashcards", "Lesson", "Quiz", "View Progress"]
@@ -207,8 +207,8 @@ let spanishTopics = [
         ],
         quizHighScore: 0,
         progress: [
-            "Lesson": "Not Started",
-            "Quiz": "Not Started",
+            "Lesson": "Not completed",
+            "Quiz": "Not taken",
             "Flashcards": "0/10 reviewed"
         ],
         subPages: ["View Vocabulary List", "Practice Flashcards", "Lesson", "Quiz", "View Progress"]
@@ -248,8 +248,8 @@ let spanishTopics = [
         ],
         quizHighScore: 0,
         progress: [
-            "Lesson": "Not Started",
-            "Quiz": "Not Started",
+            "Lesson": "Not completed",
+            "Quiz": "Not taken",
             "Flashcards": "0/10 reviewed"
         ],
         subPages: ["View Vocabulary List", "Practice Flashcards", "Lesson", "Quiz", "View Progress"]

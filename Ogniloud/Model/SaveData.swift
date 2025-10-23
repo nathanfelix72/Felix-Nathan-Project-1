@@ -7,6 +7,7 @@
 
 import Foundation
 
+// I had chatGPT help me write this out since I wasn't quite how to do it, but I do understand it now, looking at how it compares to what we've done before
 struct SaveData {
     
     // MARK: - Properties

@@ -30,9 +30,9 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		FC95F5EB2E980374009FB0BE /* Felix Nathan Project 1 */ = {
+		FC95F5EB2E980374009FB0BE /* Ogniloud */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "Felix Nathan Project 1";
+			path = Ogniloud;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -65,7 +65,7 @@
 		FC95F5E02E980374009FB0BE = {
 			isa = PBXGroup;
 			children = (
-				FC95F5EB2E980374009FB0BE /* Felix Nathan Project 1 */,
+				FC95F5EB2E980374009FB0BE /* Ogniloud */,
 				FC95F5EA2E980374009FB0BE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -96,7 +96,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				FC95F5EB2E980374009FB0BE /* Felix Nathan Project 1 */,
+				FC95F5EB2E980374009FB0BE /* Ogniloud */,
 			);
 			name = "Felix Nathan Project 1";
 			packageProductDependencies = (

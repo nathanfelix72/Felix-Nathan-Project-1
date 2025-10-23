@@ -27,6 +27,10 @@ struct QuizView: View {
     var body: some View {
         VStack {
             if !entries.isEmpty && entries.indices.contains(currentIndex) {
+                Text("Question \(currentIndex + 1)/\(entries.count)")
+                    .font(.headline)
+                    .foregroundColor(.secondary)
+                
                 if currentIndex < (entries.count) {
                     QuizQuestion(
                         quizQuestion: entries[currentIndex],
@@ -62,10 +66,6 @@ struct QuizView: View {
                         .cornerRadius(Constants.cornerRadius)
                     }
                     .disabled(currentIndex >= (entries.count) || !hasSubmitted)
-                    
-                    Text("Question \(currentIndex + 1)/\(entries.count)")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
                 }
                 .padding()
             } else {

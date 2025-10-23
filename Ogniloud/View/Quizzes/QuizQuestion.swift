@@ -36,7 +36,6 @@ struct QuizQuestion: View {
                 submitAnswer()
             }
         )
-        .aspectRatio(Constants.aspectRatio, contentMode: .fit)
     }
     
     // MARK: - Private Functions
@@ -53,12 +52,6 @@ struct QuizQuestion: View {
         
         hasSubmitted = true
         onAnswerSubmitted()
-    }
-    
-    // MARK: - Constants
-    
-    private struct Constants {
-        static let aspectRatio: CGFloat = 3.0 / 4.0
     }
 }
 

@@ -55,10 +55,11 @@ struct TopicsView: View {
                     }
                     .padding()
                     
-                    Button("Reset To Defaults") {
-                        ogniloudViewModel.resetToDefaults()
-                    }
-                    .padding()
+                    // This is for testing to reset all defaults
+//                    Button("Reset To Defaults") {
+//                        ogniloudViewModel.resetToDefaults()
+//                    }
+//                    .padding()
                 }
                 .navigationTitle("Topics")
             }

@@ -44,11 +44,12 @@ struct Quizzify: ViewModifier {
         GeometryReader { geometry in
             ZStack {
                 VStack(spacing: Constants.verticalSpacing) {
+                    Spacer()
+                    
                     Text(question)
                         .font(.title2)
                         .bold()
                         .multilineTextAlignment(.center)
-                        .padding(.top)
                     
                     Spacer()
                     
@@ -56,7 +57,6 @@ struct Quizzify: ViewModifier {
                         VStack(spacing: Constants.spacing) {
                             TextField("Your answer", text: $userAnswer)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .padding(.horizontal)
                             
                             Button(action: onSubmit) {
                                 Text("Submit")
@@ -68,8 +68,8 @@ struct Quizzify: ViewModifier {
                                     .cornerRadius(Constants.cornerRadius)
                             }
                             .disabled(userAnswer.isEmpty)
-                            .padding(.horizontal)
                         }
+                        .padding(.horizontal)
                     } else {
                         VStack(spacing: Constants.spacing) {
                             HStack(spacing: Constants.iconSpacing) {

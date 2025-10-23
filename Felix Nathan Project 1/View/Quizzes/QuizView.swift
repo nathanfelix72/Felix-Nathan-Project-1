@@ -37,7 +37,7 @@ struct QuizView: View {
                     .id(entries[currentIndex].id)
                 }
                 
-                HStack {
+                VStack() {
                     Button(action: {
                         if currentIndex < (entries.count - 1) {
                             currentIndex += 1
@@ -58,38 +58,42 @@ struct QuizView: View {
                         .cornerRadius(Constants.cornerRadius)
                     }
                     .disabled(currentIndex >= (entries.count) || !hasSubmitted)
+                    
+                    Text("Question \(currentIndex + 1)/\(entries.count)")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
                 }
                 .padding()
-                
-                Text("Question \(currentIndex + 1)/\(entries.count)")
             } else {
                 let currentScore = entries.filter { $0.answeredCorrectly }.count
                 
                 List {
                     Section(header: Text("Quiz Complete!")) {
-                        Text("You have completed the quiz on \(topic).")
-                        
                         Text("Score: \(currentScore)/\(entries.count) - High Score: \(viewModel.getHighScore(for: topic))")
                             .font(.headline)
                             .padding()
                             .background(Color(.systemGray6))
-                            .cornerRadius(8)
+                            .cornerRadius(Constants.cornerRadius)
                         
                         ForEach(entries) { entry in
-                            VStack(alignment: .leading, spacing: 8) {
+                            VStack(alignment: .leading) {
                                 Text(entry.question)
                                     .font(.subheadline)
                                 
+                                Spacer()
+                                
                                 if let userAns = entry.userAnswer {
                                     if entry.answeredCorrectly {
-                                        HStack {
+                                        HStack(alignment: .top) {
                                             Image(systemName: "checkmark.circle.fill")
                                                 .foregroundColor(.green)
-                                            Text("Your Answer: \(userAns)")
-                                                .foregroundColor(.green)
+                                            VStack(alignment: .leading) {
+                                                Text("Your Answer: \(userAns)")
+                                                    .foregroundColor(.green)
+                                            }
                                         }
                                     } else {
-                                        HStack {
+                                        HStack(alignment: .top) {
                                             Image(systemName: "xmark.circle.fill")
                                                 .foregroundColor(.red)
                                             VStack(alignment: .leading) {
@@ -105,7 +109,7 @@ struct QuizView: View {
                                         .foregroundColor(.gray)
                                 }
                             }
-                            .padding(.vertical, 4)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
                     
@@ -121,7 +125,6 @@ struct QuizView: View {
                 }
             }
         }
-        .padding()
         .onAppear {
             entries = viewModel.getQuizQuestions(for: topic)
             currentIndex = 0

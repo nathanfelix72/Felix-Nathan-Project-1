@@ -88,6 +88,39 @@ struct FlashcardView: View {
             
             HStack(spacing: Constants.betweenButtonPadding) {
                 Button(action: {
+                    viewModel.toggleSingleFlashcard(for: topic, flashcardId: flashcards[currentIndex].id)
+                }) {
+                    HStack {
+                        Image(systemName: flashcards[currentIndex].isReviewed ? "xmark.circle.fill" : "checkmark.circle.fill")
+                        Text(flashcards[currentIndex].isReviewed ? "Unmark Review" : "Mark Reviewed")
+                    }
+                    .font(.subheadline)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, Constants.buttonPadding)
+                    .background(Color.green)
+                    .foregroundColor(.white)
+                    .cornerRadius(Constants.cornerRadius)
+                }
+                
+                Button(action: {
+                    viewModel.shuffleFlashcards(for: topic)
+                    currentIndex = 0
+                }) {
+                    HStack {
+                        Image(systemName: "shuffle")
+                        Text("Shuffle")
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, Constants.buttonPadding)
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(Constants.cornerRadius)
+                }
+            }
+            .padding(.horizontal)
+            
+            HStack(spacing: Constants.betweenButtonPadding) {
+                Button(action: {
                     viewModel.markAllFlashcards(for: topic, reviewed: true)
                 }) {
                     HStack {
@@ -112,41 +145,8 @@ struct FlashcardView: View {
                     .font(.subheadline)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, Constants.buttonPadding)
-                    .background(Color.red)
-                    .foregroundColor(.white)
-                    .cornerRadius(Constants.cornerRadius)
-                }
-            }
-            .padding(.horizontal)
-            
-            HStack(spacing: Constants.betweenButtonPadding) {
-                Button(action: {
-                    viewModel.toggleSingleFlashcard(for: topic, flashcardId: flashcards[currentIndex].id)
-                }) {
-                    HStack {
-                        Image(systemName: "checkmark.circle.fill")
-                        Text("Toggle This Card")
-                    }
-                    .font(.subheadline)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, Constants.buttonPadding)
-                    .background(Color.green)
-                    .foregroundColor(.white)
-                    .cornerRadius(Constants.cornerRadius)
-                }
-                
-                Button(action: {
-                    viewModel.shuffleFlashcards(for: topic)
-                    currentIndex = 0
-                }) {
-                    HStack {
-                        Image(systemName: "shuffle")
-                        Text("Shuffle")
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, Constants.buttonPadding)
                     .background(Color.yellow)
-                    .foregroundColor(.white)
+                    .foregroundColor(.black)
                     .cornerRadius(Constants.cornerRadius)
                 }
             }

@@ -12,11 +12,13 @@ struct QuizQuestion: View {
     // MARK: - Properties
     
     let quizQuestion: OgniloudModel.QuizQuestion
+    let viewModel: OgniloudViewModel
+    let topic: String
     
     @Binding var userAnswer: String
     @Binding var hasSubmitted: Bool
     
-    let onSubmit: () -> Void
+    let onAnswerSubmitted: () -> Void
     
     // MARK: - Body
     
@@ -30,9 +32,27 @@ struct QuizQuestion: View {
             answeredCorrectly: quizQuestion.answeredCorrectly,
             userAnswer: $userAnswer,
             hasSubmitted: $hasSubmitted,
-            onSubmit: onSubmit
+            onSubmit: {
+                submitAnswer()
+            }
         )
         .aspectRatio(Constants.aspectRatio, contentMode: .fit)
+    }
+    
+    // MARK: - Private Functions
+    
+    private func submitAnswer() {
+        let isCorrect = userAnswer.lowercased().trimmingCharacters(in: .whitespacesAndNewlines) == quizQuestion.correctAnswer.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        viewModel.submitQuizAnswer(
+            for: topic,
+            questionId: quizQuestion.id,
+            userAnswer: userAnswer,
+            isCorrect: isCorrect
+        )
+        
+        hasSubmitted = true
+        onAnswerSubmitted()
     }
     
     // MARK: - Constants
@@ -45,9 +65,11 @@ struct QuizQuestion: View {
 #Preview {
     QuizQuestion(
         quizQuestion: OgniloudModel.QuizQuestion(question: "What is 'Madre' in English?", correctAnswer: "Mother", answeredCorrectly: false),
+        viewModel: OgniloudViewModel(),
+        topic: "Relationships",
         userAnswer: .constant(""),
         hasSubmitted: .constant(false),
-        onSubmit: {}
+        onAnswerSubmitted: {}
     )
         .padding()
 }

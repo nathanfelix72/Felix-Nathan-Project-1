@@ -30,9 +30,13 @@ struct QuizView: View {
                 if currentIndex < (entries.count) {
                     QuizQuestion(
                         quizQuestion: entries[currentIndex],
+                        viewModel: viewModel,
+                        topic: topic,
                         userAnswer: $userAnswer,
                         hasSubmitted: $hasSubmitted,
-                        onSubmit: submitAnswer
+                        onAnswerSubmitted: {
+                            entries = viewModel.getQuizQuestions(for: topic)
+                        }
                     )
                     .id(entries[currentIndex].id)
                 }
@@ -157,21 +161,6 @@ struct QuizView: View {
         let current = entries[currentIndex]
         userAnswer = current.userAnswer ?? ""
         hasSubmitted = current.userAnswer != nil
-    }
-    
-    private func submitAnswer() {
-        let isCorrect = userAnswer.lowercased().trimmingCharacters(in: .whitespacesAndNewlines) == entries[currentIndex].correctAnswer.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
-        
-        viewModel.submitQuizAnswer(
-            for: topic,
-            questionId: entries[currentIndex].id,
-            userAnswer: userAnswer,
-            isCorrect: isCorrect
-        )
-        
-        hasSubmitted = true
-        
-        entries = viewModel.getQuizQuestions(for: topic)
     }
     
     // MARK: - Constants
